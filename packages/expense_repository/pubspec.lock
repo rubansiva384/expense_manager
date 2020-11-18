@@ -29,20 +29,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.5.0-nullsafety.2"
-  authentication_repository:
-    dependency: "direct main"
-    description:
-      path: "packages/authentication_repository"
-      relative: true
-    source: path
-    version: "1.0.0"
-  bloc:
-    dependency: transitive
-    description:
-      name: bloc
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "6.1.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -169,13 +155,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.5"
-  cupertino_icons:
-    dependency: "direct main"
-    description:
-      name: cupertino_icons
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
   dart_style:
     dependency: transitive
     description:
@@ -184,19 +163,12 @@ packages:
     source: hosted
     version: "1.3.9"
   equatable:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: equatable
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.5"
-  expense_repository:
-    dependency: "direct main"
-    description:
-      path: "packages/expense_repository"
-      relative: true
-    source: path
-    version: "1.0.0"
   fake_async:
     dependency: transitive
     description:
@@ -212,29 +184,15 @@ packages:
     source: hosted
     version: "0.10.11"
   flutter:
-    dependency: "direct main"
+    dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_bloc:
-    dependency: "direct main"
-    description:
-      name: flutter_bloc
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "6.1.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
     source: sdk
     version: "0.0.0"
-  formz:
-    dependency: "direct main"
-    description:
-      name: formz
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.2"
   glob:
     dependency: transitive
     description:
@@ -249,13 +207,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.0"
-  http:
-    dependency: "direct main"
-    description:
-      name: http
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.12.2"
   http_multi_server:
     dependency: transitive
     description:
@@ -326,13 +277,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.7"
-  nested:
-    dependency: transitive
-    description:
-      name: nested
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.4"
   node_interop:
     dependency: transitive
     description:
@@ -355,7 +299,7 @@ packages:
     source: hosted
     version: "1.9.3"
   path:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path
       url: "https://pub.dartlang.org"
@@ -375,13 +319,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.0"
-  provider:
-    dependency: transitive
-    description:
-      name: provider
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.3.2+2"
   pub_semver:
     dependency: transitive
     description:
@@ -437,7 +374,7 @@ packages:
     source: hosted
     version: "1.8.0-nullsafety.3"
   sqflite:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: sqflite
       url: "https://pub.dartlang.org"
@@ -513,20 +450,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0-nullsafety.4"
-  user_repository:
-    dependency: "direct main"
-    description:
-      path: "packages/user_repository"
-      relative: true
-    source: path
-    version: "1.0.0"
-  uuid:
-    dependency: transitive
-    description:
-      name: uuid
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.2.2"
   vector_math:
     dependency: transitive
     description:
