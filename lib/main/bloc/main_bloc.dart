@@ -28,7 +28,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     if(event is MainEventNewBill && state is MainLoaded){
       MainLoaded currentState = state;
       currentState.entities.add(event.expenseEntity);
-      yield currentState;
+      yield currentState.copyWith(list: currentState.entities);
     }
   }
 }

@@ -15,4 +15,13 @@ class MainLoaded extends MainState{
   List<ExpenseEntity> entities;
   MainLoaded({this.available , this.spent , this.salary , this.entities});
 
+  MainLoaded copyWith({List<ExpenseEntity> list , String salary , String spent , String available}){
+    return MainLoaded(
+      entities: list ?? this.entities,
+      salary: salary ?? this.salary,
+      spent: spent ?? this.spent,
+      available: available ?? this.available
+    );
+  }
+
 }

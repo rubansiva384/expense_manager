@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
+  Bloc.observer = MyObserver();
   final repo = ExpenseRepository();
   runApp(
       // App(userRepository: UserRepository() , authenticationRepository: AuthenticationRepository(),)
@@ -19,4 +20,12 @@ void main() {
       ),
     ),
   ));
+}
+
+class MyObserver extends BlocObserver{
+  @override
+  void onTransition(Bloc bloc, Transition transition) {
+    print(transition);
+    super.onTransition(bloc, transition);
+  }
 }

@@ -12,6 +12,7 @@ class ExpenseEntity {
   final String name;
   @JsonKey(name: MyDatabase.COLUMN_EXPENSE_DESCRIPTION)
   final String description;
+  @JsonKey(name: MyDatabase.COLUMN_TIME)
   final int dateTime;
   @JsonKey(name: MyDatabase.COLUMN_EXPENSE_AMOUNT)
   final int amount;

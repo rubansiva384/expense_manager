@@ -18,7 +18,7 @@ class MainView extends StatelessWidget {
         return Container(
           child: ListView.builder(itemBuilder: (context , int){
             ExpenseEntity entity = state.entities[int];
-            return ListTile(title: Text("${entity.name}"),);
+            return ListRow(title: entity.name,);
           }, itemCount: state.entities.length,
           ),
         );
@@ -26,3 +26,59 @@ class MainView extends StatelessWidget {
     });
   }
 }
+
+class ListRow extends StatelessWidget {
+  final String title;
+
+  ListRow({this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        children: [
+          Container(
+            margin: EdgeInsets.all(10.0),
+            child: Circle(),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 10),
+            child:  Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  child: Text(title , style: TextStyle(fontSize: 20 , fontWeight: FontWeight.bold), textAlign: TextAlign.left,)  ,
+                )
+                ,
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(title , style: TextStyle(fontSize: 15) ,),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Circle extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 60,
+      height: 60,
+      child: Stack(
+        children: [
+          Icon(Icons.circle , color: Colors.blueAccent, size: 60,),
+          Center(
+            child: Icon(Icons.add , color: Colors.white, size: 35,),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+
