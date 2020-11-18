@@ -7,9 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class MainView extends StatelessWidget {
   Widget build(BuildContext context) {
     // ignore: missing_return
-    return BlocBuilder(builder: (context , state){
+    return BlocBuilder<MainBloc, MainState>(builder: (context , state){
       if(state is MainInitial){
-         Container(
+         return Container(
           child: Center(
             child: CircularProgressIndicator(),
           ),

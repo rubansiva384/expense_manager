@@ -7,46 +7,42 @@ import 'package:sqflite/sqflite.dart';
 class MyDatabase{
   static Database _database;
   static MyDatabase _myDatabase;
-  static const COLUMN_PRODUCT_NAME = "product_name";
-  static const COLUMN_PRODUCT_QUANTITY = "product_quantity";
-  static const COLUMN_PRODUCT_TIME = "product_time";
-  static const TABLE_PRODUCT_TIME = "products";
+  static const COLUMN_EXPENSE_NAME = "expense_name";
+  static const COLUMN_EXPENSE_CATEGORY = "expense_category";
+  static const COLUMN_EXPENSE_DESCRIPTION = "expense_description";
+  static const COLUMN_EXPENSE_AMOUNT = "expense_amount";
+  static const COLUMN_TIME = "entered_time";
+  static const COLUMN_EXPENSE_TYPE = "expense_type";
+  static const TABLE_EXPENSE = "expense";
 
-  static MyDatabase getMyDatabase() {
+  static MyDatabase getInstance() {
     if(_myDatabase == null){
       _myDatabase = MyDatabase();
     }
     return _myDatabase;
   }
 
-
-  static getDatabaseInstance() async{
+  Future<Database> _getDatabaseInstance() async{
     if(_database == null){
       WidgetsFlutterBinding.ensureInitialized();
-      // Open the database and store the reference.
       final Future<Database> database = openDatabase(
-        // Set the path to the database. Note: Using the `join` function from the
-        // `path` package is best practice to ensure the path is correctly
-        // constructed for each platform.
-        join(await getDatabasesPath(), 'doggie_database.db'),
-        // When the database is first created, create a table to store dogs.
+        join(await getDatabasesPath(), 'expense_db.db'),
         onCreate: (db, version) {
           return db.execute(
-            "CREATE TABLE $TABLE_PRODUCT_TIME($COLUMN_PRODUCT_NAME varchar(50), $COLUMN_PRODUCT_QUANTITY varchar(50) , $COLUMN_PRODUCT_TIME INTEGER)",
+            // TODO expense type always could be 2 possible types(credit debit) so remove with boolean if available in sqlite;
+            "CREATE TABLE $TABLE_EXPENSE($COLUMN_EXPENSE_NAME varchar(50), $COLUMN_EXPENSE_DESCRIPTION varchar(50) , $COLUMN_EXPENSE_TYPE INTEGER ,  $COLUMN_EXPENSE_AMOUNT INTEGER  ,  $COLUMN_EXPENSE_CATEGORY varchar(50) )",
           );
         },
-        // Set the version. This executes the onCreate function and provides a
-        // path to perform database upgrades and downgrades.
         version: 1,
       );
-      return database;
-    }else
+      _database =  await database;
+    }
       return _database;
   }
 
   Future<List<ExpenseEntity>> getAllExpenses() async{
-    final Database db = await getDatabaseInstance();
-    List<Map<String, dynamic>> list = await db.query(TABLE_PRODUCT_TIME);
+    final Database db = await _getDatabaseInstance();
+    List<Map<String, dynamic>> list = await db.query(TABLE_EXPENSE);
     List<ExpenseEntity> products = List<ExpenseEntity>();
     list.forEach((element) {
       products.add(ExpenseEntity.fromJson(element));
@@ -54,9 +50,9 @@ class MyDatabase{
     return products;
   }
 
-  Future<void> addExpense(ExpenseEntity expenseEntity) async{
-    final Database db = await getDatabaseInstance();
-    await db.insert(TABLE_PRODUCT_TIME, expenseEntity.toJson());
+  Future<int> addExpense(ExpenseEntity expenseEntity) async{
+    final Database db = await _getDatabaseInstance();
+    return await db.insert(TABLE_EXPENSE, expenseEntity.toJson());
   }
 
 }

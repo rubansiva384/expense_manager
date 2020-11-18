@@ -9,7 +9,7 @@ dependencies:
   equatable: ^1.2.0
   # import 'package:path/path.dart';
   # import 'package:sqflite/sqflite.dart';
-  sqflite: ^1.3.0
+  sqflite:
   path:
 
   #flutter pub run build_runner build

@@ -7,3 +7,9 @@ class MainEventLoad extends MainEvent{
 
 }
 
+class MainEventNewBill extends MainEvent{
+  final ExpenseEntity expenseEntity;
+
+  MainEventNewBill({this.expenseEntity});
+}
+

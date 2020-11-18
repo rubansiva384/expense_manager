@@ -6,19 +6,19 @@ import 'package:expense_repository/src/expense_event.dart';
 import 'model/ExpenseEntity.dart';
 
 class ExpenseRepository{
-MyDatabase _dataSource;
 final _controller = StreamController<ExpenseRepositoryEvent>();
 
   Future<List<ExpenseEntity>> getList() async{
-      return await _dataSource.getAllExpenses();
+      return await MyDatabase.getInstance().getAllExpenses();
   }
 
   Stream<ExpenseRepositoryEvent> get controller{
     return _controller.stream;
   }
 
-  void addExpense(ExpenseEntity expenseEntity) async{
-    await _dataSource.addExpense(expenseEntity);
+  addExpense(ExpenseEntity expenseEntity) async{
+    int result = await MyDatabase.getInstance().addExpense(expenseEntity);
+    if(result != -1)
     _controller.add(ExpenseAdded(expenseEntity: expenseEntity));
   }
 
