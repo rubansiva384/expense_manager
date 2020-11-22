@@ -18,7 +18,7 @@ class MainView extends StatelessWidget {
         return Container(
           child: ListView.builder(itemBuilder: (context , int){
             ExpenseEntity entity = state.entities[int];
-            return ListRow(title: entity.name,);
+            return ListRow(entity: entity,);
           }, itemCount: state.entities.length,
           ),
         );
@@ -28,9 +28,9 @@ class MainView extends StatelessWidget {
 }
 
 class ListRow extends StatelessWidget {
-  final String title;
+  final ExpenseEntity entity;
 
-  ListRow({this.title});
+  ListRow({this.entity});
 
   @override
   Widget build(BuildContext context) {
@@ -41,22 +41,40 @@ class ListRow extends StatelessWidget {
             margin: EdgeInsets.all(10.0),
             child: Circle(),
           ),
-          Container(
-            margin: EdgeInsets.only(left: 10),
-            child:  Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  child: Text(title , style: TextStyle(fontSize: 20 , fontWeight: FontWeight.bold), textAlign: TextAlign.left,)  ,
-                )
-                ,
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(title , style: TextStyle(fontSize: 15) ,),
-                )
-              ],
+          Expanded(
+            child:  Container(
+              margin: EdgeInsets.only(left: 10),
+              child:  Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    child: Text(entity.name , style: TextStyle(fontSize: 22 , fontWeight: FontWeight.bold), textAlign: TextAlign.left,)  ,
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(entity.description , style: TextStyle(fontSize: 15) ,),
+                  )
+                ],
+              ),
             ),
           ),
+          Container(
+              alignment: Alignment.centerRight,
+              margin: EdgeInsets.only(left: 10),
+              padding: EdgeInsets.only(right: 20),
+              child:  Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Container(
+                    child: Text(entity.visibleAmount , style: TextStyle(color : Colors.red , fontSize: 18 , fontWeight: FontWeight.bold), textAlign: TextAlign.left,)  ,
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(entity.visibleTimeHome , style: TextStyle(fontSize: 13) ,),
+                  )
+                ],
+              ),
+            ),
         ],
       ),
     );

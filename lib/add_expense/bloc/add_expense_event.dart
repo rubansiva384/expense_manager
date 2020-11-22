@@ -11,6 +11,7 @@ class EventAddBill extends AddExpenseEvent{
   final String amount;
   final String category;
   final int type;
+  final int time;
 
-  EventAddBill({this.name , this.category , this.amount , this.description , this.type});
+  EventAddBill({this.name , this.category , this.amount , this.description , this.type , this.time});
 }

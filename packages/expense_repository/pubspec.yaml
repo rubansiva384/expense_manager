@@ -11,6 +11,8 @@ dependencies:
   # import 'package:sqflite/sqflite.dart';
   sqflite:
   path:
+  intl:
+
 
   #flutter pub run build_runner build
   json_annotation:
