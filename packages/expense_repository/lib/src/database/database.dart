@@ -13,6 +13,7 @@ class MyDatabase{
   static const COLUMN_EXPENSE_AMOUNT = "expense_amount";
   static const COLUMN_TIME = "entered_time";
   static const COLUMN_EXPENSE_TYPE = "expense_type";
+  static const COLUMN_IMAGE = "expense_image";
   static const TABLE_EXPENSE = "expense";
 
   static MyDatabase getInstance() {
@@ -30,7 +31,7 @@ class MyDatabase{
         onCreate: (db, version) {
           return db.execute(
             // TODO expense type always could be 2 possible types(credit debit) so remove with boolean if available in sqlite;
-            "CREATE TABLE $TABLE_EXPENSE($COLUMN_EXPENSE_NAME varchar(50), $COLUMN_EXPENSE_DESCRIPTION varchar(50) , $COLUMN_EXPENSE_TYPE INTEGER ,  $COLUMN_EXPENSE_AMOUNT INTEGER  ,  $COLUMN_EXPENSE_CATEGORY varchar(50)  , $COLUMN_TIME datetime)",
+            "CREATE TABLE $TABLE_EXPENSE($COLUMN_EXPENSE_NAME varchar(50), $COLUMN_EXPENSE_DESCRIPTION varchar(50) , $COLUMN_EXPENSE_TYPE INTEGER ,  $COLUMN_EXPENSE_AMOUNT INTEGER  ,  $COLUMN_EXPENSE_CATEGORY varchar(50)  , $COLUMN_TIME datetime , $COLUMN_IMAGE varchar(50) )",
           );
         },
         version: 1,

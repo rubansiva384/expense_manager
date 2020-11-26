@@ -13,6 +13,7 @@ ExpenseEntity _$ExpenseEntityFromJson(Map<String, dynamic> json) {
     dateTime: json['entered_time'] as int,
     amount: json['expense_amount'] as int,
     type: json['expense_type'] as int,
+    image: json['expense_image'] as String,
   );
 }
 
@@ -23,4 +24,5 @@ Map<String, dynamic> _$ExpenseEntityToJson(ExpenseEntity instance) =>
       'entered_time': instance.dateTime,
       'expense_amount': instance.amount,
       'expense_type': instance.type,
+      'expense_image': instance.image,
     };

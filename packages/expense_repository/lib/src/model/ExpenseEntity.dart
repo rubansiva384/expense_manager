@@ -18,9 +18,11 @@ class ExpenseEntity {
   final int amount;
   @JsonKey(name: MyDatabase.COLUMN_EXPENSE_TYPE)
   final int type;
+  @JsonKey(name: MyDatabase.COLUMN_IMAGE)
+  final String image;
 
   ExpenseEntity(
-      {this.name, this.description, this.dateTime, this.amount, this.type});
+      {this.name, this.description, this.dateTime, this.amount, this.type , this.image});
 
   factory ExpenseEntity.fromJson(Map<String, dynamic> json) =>
       _$ExpenseEntityFromJson(json);
