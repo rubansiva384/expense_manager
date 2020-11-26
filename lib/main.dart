@@ -1,3 +1,4 @@
+import 'package:expense_manager/ScrollApp.dart';
 import 'package:expense_manager/home/view/home_page.dart';
 import 'package:expense_manager/main/bloc/main_bloc.dart';
 import 'package:expense_manager/main/view/MainPage.dart';
@@ -11,6 +12,7 @@ void main() {
   runApp(
       // App(userRepository: UserRepository() , authenticationRepository: AuthenticationRepository(),)
       //MainPage(ExpenseRepository())
+//    ScrollApp()
       MaterialApp(
     home: RepositoryProvider.value(
       value: repo,
@@ -22,7 +24,7 @@ void main() {
   ));
 }
 
-class MyObserver extends BlocObserver{
+class MyObserver extends BlocObserver {
   @override
   void onTransition(Bloc bloc, Transition transition) {
     print(transition);
