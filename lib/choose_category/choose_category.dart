@@ -1,4 +1,5 @@
 import 'package:expense_manager/choose_category/model/ExpenseCategory.dart';
+import 'package:expense_manager/widgets/AppImage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -35,7 +36,7 @@ class ChooseCategory extends StatelessWidget {
             final ExpenseCategory entity = ChooseCategory.CATEGORY_LIST[position];
             return GestureDetector(
               onTap: (){
-
+                Navigator.pop(context , entity);
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -71,7 +72,7 @@ class Circle extends StatelessWidget {
             child: Icon(Icons.circle , color: Colors.blueAccent, size: 70,),
           ),
           Center(
-            child: Image(image: AssetImage(ChooseCategory.PACKAGE_NAME+sourceName+".png"),),
+            child: AppImage(sourceName),
           )
         ],
       ),

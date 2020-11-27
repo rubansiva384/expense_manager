@@ -13,6 +13,10 @@ class AddExpenseView extends StatelessWidget {
   TextEditingController _controllerUserName = TextEditingController();
   TextEditingController _controllerDescription = TextEditingController();
   TextEditingController _controllerAmount = TextEditingController();
+  static const String LABEL_NAME = "NAME *";
+  static const String LABEL_CATEGORY = "CATEGORY *";
+  static const String LABEL_AMOUNT = "AMOUNT *";
+  static const String LABEL_DESCRIPTION = "DESCRIPTION";
   ExpenseCategory category;
   final BoxDecoration _boxDecoration =
       BoxDecoration(border: Border.all(width: 1.3, color: Colors.black26));
@@ -20,36 +24,36 @@ class AddExpenseView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-          color: Colors.black12
-      ),
+      decoration: BoxDecoration(color: Colors.black12),
       child: Container(
         margin: EdgeInsets.all(45),
         child: Center(
           child: Container(
             padding: EdgeInsets.all(30.0),
-            decoration: BoxDecoration(
-                color: Colors.white
-            ),
+            decoration: BoxDecoration(color: Colors.white),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 InputBox(
-                  label: "NAME *",
+                  label: LABEL_NAME,
                   controller: _controllerUserName,
                   boxDecoration: _boxDecoration,
                 ),
                 InputBox(
-                  label: "DESCRIPTION",
+                  label: LABEL_DESCRIPTION,
                   controller: _controllerDescription,
                   boxDecoration: _boxDecoration,
                 ),
                 InputBox(
-                  label: "AMOUNT *",
+                  label: LABEL_AMOUNT,
                   controller: _controllerAmount,
                   boxDecoration: _boxDecoration,
                 ),
-                InputChooseCategory(null, _boxDecoration, categoryChosen),
+                InputChooseCategory(null, _boxDecoration, (category) {
+                  context
+                      .read<AddExpenseBloc>()
+                      .add(CategoryChanged(category: category));
+                }),
                 SaveButton(() {
                   save(context);
                 }),
@@ -61,16 +65,17 @@ class AddExpenseView extends StatelessWidget {
     );
   }
 
-  void categoryChosen(ExpenseCategory category) {
-    this.category = category;
-  }
+//  void categoryChosen(ExpenseCategory category ) {
+//    this.category = category;
+//
+//  }
 
   void save(BuildContext context) {
     context.read<AddExpenseBloc>().add(EventAddBill(
         name: _controllerUserName.text,
         description: _controllerDescription.text,
         amount: _controllerAmount.text,
-        category: category.name,
+        category: category,
         type: ExpenseEntity.TYPE_DEBIT,
         time: DateTime.now().millisecondsSinceEpoch));
     Navigator.pop(context);
@@ -99,6 +104,17 @@ class InputBox extends StatelessWidget {
           decoration: boxDecoration,
           child: TextField(
             controller: controller,
+            onChanged: (text) {
+              if (this.label == AddExpenseView.LABEL_NAME) {
+                context.read<AddExpenseBloc>().add(NameChanged(name: text));
+              } else if (this.label == AddExpenseView.LABEL_DESCRIPTION) {
+                context
+                    .read<AddExpenseBloc>()
+                    .add(DescriptionChange(desc: text));
+              } else if (this.label == AddExpenseView.LABEL_AMOUNT) {
+                context.read<AddExpenseBloc>().add(AmountChanged(amount: text));
+              }
+            },
             decoration: InputDecoration(
                 contentPadding: EdgeInsets.all(5.0),
                 errorText: null,
@@ -119,41 +135,44 @@ class InputChooseCategory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () async {
-        final ExpenseCategory expenseCategory = await Navigator.push(
-            context, MaterialPageRoute(builder: (context) => ChooseCategory()));
-        categoryChosen(expenseCategory);
-      },
-      child: Column(
-        children: [
-          Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                padding: EdgeInsets.only(top: 10.0, bottom: 5),
-                child: Text("CATEGORY *"),
-              )),
-          Container(
-            decoration: _boxDecoration,
-            padding: EdgeInsets.all(5),
-            child: Row(
+    return BlocBuilder<AddExpenseBloc, AddExpenseState>(
+        builder: (context, state) {
+          return GestureDetector(
+            onTap: () async {
+              final ExpenseCategory expenseCategory = await Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => ChooseCategory()));
+              categoryChosen(expenseCategory);
+            },
+            child: Column(
               children: [
-                Circle(
-                  sourceName: entity != null ? entity.imageResource : "",
-                ),
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      padding: EdgeInsets.only(top: 10.0, bottom: 5),
+                      child: Text("CATEGORY *"),
+                    )),
                 Container(
-                  margin: EdgeInsets.only(left: 5),
-                  child: Text(
-                    entity == null ? "Select a category" : entity.name,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  decoration: _boxDecoration,
+                  padding: EdgeInsets.all(5),
+                  child: Row(
+                    children: [
+                      Circle(
+                        sourceName: state.expenseCategory != null ? state.expenseCategory.imageResource : "",
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(left: 5),
+                        child: Text(
+                          state.expenseCategory != null  ? state.expenseCategory.name  : "Select a category",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      )
+                    ],
                   ),
                 )
               ],
             ),
-          )
-        ],
-      ),
-    );
+          );
+        });
   }
 }
 
@@ -165,18 +184,19 @@ class SaveButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-          color: hexToColor("#FFB967")
-      ),
+      decoration: BoxDecoration(color: hexToColor("#FFB967")),
       margin: EdgeInsets.only(top: 70),
       padding: EdgeInsets.all(10.0),
       child: Row(
         children: [
           Expanded(
-            child: GestureDetector(child:
-            Align(
-                child: Text("Add Bill" , style: TextStyle(color: Colors.black),))
-            ),
+            child: GestureDetector(
+              onTap: callback,
+                child: Align(
+                    child: Text(
+              "Add Bill",
+              style: TextStyle(color: Colors.black),
+            ))),
           )
         ],
       ),
@@ -204,8 +224,8 @@ class Circle extends StatelessWidget {
           ),
           Center(
             child: Container(
-              padding: EdgeInsets.all(5),
               child: Image(
+                width: 20,
                 image: AssetImage(
                     ChooseCategory.PACKAGE_NAME + sourceName + ".png"),
               ),

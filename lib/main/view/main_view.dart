@@ -1,4 +1,5 @@
 import 'package:expense_manager/main/bloc/main_bloc.dart';
+import 'package:expense_manager/widgets/AppImage.dart';
 import 'package:expense_repository/expense_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -91,7 +92,7 @@ class Circle extends StatelessWidget {
         children: [
           Icon(Icons.circle , color: Colors.blueAccent, size: 60,),
           Center(
-            child: Icon(Icons.add , color: Colors.white, size: 35,),
+            child: AppImage(""),
           )
         ],
       ),
