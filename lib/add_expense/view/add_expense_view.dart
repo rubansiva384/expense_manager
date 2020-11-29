@@ -35,11 +35,6 @@ class AddExpenseView extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 InputBox(
-                  label: LABEL_NAME,
-                  controller: _controllerUserName,
-                  boxDecoration: _boxDecoration,
-                ),
-                InputBox(
                   label: LABEL_DESCRIPTION,
                   controller: _controllerDescription,
                   boxDecoration: _boxDecoration,
@@ -64,11 +59,6 @@ class AddExpenseView extends StatelessWidget {
       ),
     );
   }
-
-//  void categoryChosen(ExpenseCategory category ) {
-//    this.category = category;
-//
-//  }
 
   void save(BuildContext context) {
     context.read<AddExpenseBloc>().add(EventAddBill(
@@ -103,6 +93,7 @@ class InputBox extends StatelessWidget {
           decoration: boxDecoration,
           child: TextField(
             controller: controller,
+            keyboardType: this.label == AddExpenseView.LABEL_AMOUNT ? TextInputType.number : TextInputType.text,
             onChanged: (text) {
               if (this.label == AddExpenseView.LABEL_NAME) {
                 context.read<AddExpenseBloc>().add(NameChanged(name: text));
@@ -142,33 +133,36 @@ class InputChooseCategory extends StatelessWidget {
                   context, MaterialPageRoute(builder: (context) => ChooseCategory()));
               categoryChosen(expenseCategory);
             },
-            child: Column(
-              children: [
-                Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      padding: EdgeInsets.only(top: 10.0, bottom: 5),
-                      child: Text("CATEGORY *"),
-                    )),
-                Container(
-                  decoration: _boxDecoration,
-                  padding: EdgeInsets.all(5),
-                  child: Row(
-                    children: [
-                      Circle(
-                        sourceName: state.expenseCategory != null ? state.expenseCategory.imageResource : "",
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 5),
-                        child: Text(
-                          state.expenseCategory != null  ? state.expenseCategory.name  : "Select a category",
-                          style: TextStyle(fontWeight: FontWeight.bold),
+            child: Container(
+              margin: EdgeInsets.only(top: 20.0),
+              child: Column(
+                children: [
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        padding: EdgeInsets.only( bottom: 5),
+                        child: Text("CATEGORY *"),
+                      )),
+                  Container(
+                    decoration: _boxDecoration,
+                    padding: EdgeInsets.all(5),
+                    child: Row(
+                      children: [
+                        Circle(
+                          sourceName: state.expenseCategory != null ? state.expenseCategory.imageResource : "",
                         ),
-                      )
-                    ],
-                  ),
-                )
-              ],
+                        Container(
+                          margin: EdgeInsets.only(left: 5),
+                          child: Text(
+                            state.expenseCategory != null  ? state.expenseCategory.name  : "Select a category",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           );
         });

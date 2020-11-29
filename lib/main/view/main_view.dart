@@ -119,7 +119,6 @@ class Circle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("image is $imageName");
     return Container(
       width: 60,
       height: 60,
@@ -141,8 +140,10 @@ class Circle extends StatelessWidget {
 
 class DashBoarHeader extends StatelessWidget {
   final TextStyle styleBold = TextStyle(
-      fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20.0);
-  final TextStyle styleNormal = TextStyle(color: Colors.white);
+      fontWeight: FontWeight.bold, color: Colors.white, fontSize: 18);
+  final TextStyle styleNormal = TextStyle(color: Colors.white , fontSize: 12);
+  final double borderWidth = 0.3;
+  final Color borderColor = Colors.white;
 
   @override
   Widget build(BuildContext context) {
@@ -172,18 +173,18 @@ class DashBoarHeader extends StatelessWidget {
             ],
           ),
           Container(
-              height: 170,
-              margin: EdgeInsets.only(top: 20, bottom: 20),
-              padding: EdgeInsets.all(20.0),
+              height: 160,
               width: double.infinity,
+              margin: EdgeInsets.only(top: 20 , bottom: 20),
               decoration: BoxDecoration(
                   color: Colors.white10,
-                  border: Border.all(color: Colors.white, width: 0.3),
+                  border: Border.all(color: borderColor, width: borderWidth),
                   borderRadius: BorderRadius.all(Radius.circular(5.0))),
               child: Row(
                 children: [
                   Expanded(
                     child: Container(
+                      padding: EdgeInsets.all(20.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -210,50 +211,54 @@ class DashBoarHeader extends StatelessWidget {
                     ),
                   ),
                   VerticalDivider(
-                    color: Colors.black,
+                    width: borderWidth,
+                    color: borderColor,
                   ),
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Row(
-                            children: [
-                              Expanded(
-                                flex: 3,
-                                child: Text(
-                                  "Salary : ",
-                                  style: styleNormal,
+                    child: Container(
+                      padding: EdgeInsets.all(20.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 3,
+                                  child: Text(
+                                    "Salary : ",
+                                    style: styleNormal,
+                                  ),
                                 ),
-                              ),
-                              Expanded(
-                                flex: 7,
-                                child: Text(
-                                  "\$ 50,000",
-                                  style: styleBold,
-                                ),
-                              )
-                            ],
+                                Expanded(
+                                  flex: 7,
+                                  child: Text(
+                                    "\$ 50,000",
+                                    style: styleBold,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                        Expanded(
-                          child: Row(
-                            children: [
-                              Expanded(
-                                flex: 3,
-                                child: Text(
-                                  "Spent : ",
-                                  style: styleNormal,
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 3,
+                                  child: Text(
+                                    "Spent : ",
+                                    style: styleNormal,
+                                  ),
                                 ),
-                              ),
-                              Expanded(
-                                flex: 7,
-                                child: Text("\$ 50,000", style: styleBold),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
+                                Expanded(
+                                  flex: 7,
+                                  child: Text("\$ 50,000", style: styleBold),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ],
