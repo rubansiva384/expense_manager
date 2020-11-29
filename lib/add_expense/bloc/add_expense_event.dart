@@ -9,11 +9,11 @@ class EventAddBill extends AddExpenseEvent{
   final String name;
   final String description;
   final String amount;
-  final ExpenseCategory category;
   final int type;
   final int time;
+  final String image;
 
-  EventAddBill({this.name , this.category , this.amount , this.description , this.type , this.time});
+  EventAddBill({this.name , this.amount , this.description , this.type , this.time ,this.image });
 }
 
 class AmountChanged extends AddExpenseEvent{

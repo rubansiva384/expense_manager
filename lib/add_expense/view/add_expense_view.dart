@@ -75,7 +75,6 @@ class AddExpenseView extends StatelessWidget {
         name: _controllerUserName.text,
         description: _controllerDescription.text,
         amount: _controllerAmount.text,
-        category: category,
         type: ExpenseEntity.TYPE_DEBIT,
         time: DateTime.now().millisecondsSinceEpoch));
     Navigator.pop(context);

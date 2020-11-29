@@ -17,7 +17,7 @@ class AddExpenseBloc extends Bloc<AddExpenseEvent, AddExpenseState> {
     AddExpenseEvent event,
   ) async* {
     if(event is EventAddBill){
-      ExpenseEntity expenseEntity = new ExpenseEntity(name: event.name , description: event.description , amount: 100 , type: event.type  );
+      ExpenseEntity expenseEntity = new ExpenseEntity(name: event.name , description: event.description , amount: 100 , type: event.type , image: state.expenseCategory.imageResource );
       expenseRepository.addExpense(expenseEntity);
     }
     if(event is AmountChanged){
