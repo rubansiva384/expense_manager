@@ -7,10 +7,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-typedef OnCategoryChosen(ExpenseCategory expenseCategory);
+typedef OnCategoryChosen(int id);
 
 class AddExpenseView extends StatelessWidget {
-  TextEditingController _controllerUserName = TextEditingController();
   TextEditingController _controllerDescription = TextEditingController();
   TextEditingController _controllerAmount = TextEditingController();
   static const String LABEL_NAME = "NAME *";
@@ -44,10 +43,11 @@ class AddExpenseView extends StatelessWidget {
                   controller: _controllerAmount,
                   boxDecoration: _boxDecoration,
                 ),
-                InputChooseCategory(null, _boxDecoration, (category) {
+                InputChooseCategory(null, _boxDecoration, (position) {
+                  final ExpenseCategory expenseCategory = ChooseCategory.CATEGORY_LIST[position];
                   context
                       .read<AddExpenseBloc>()
-                      .add(CategoryChanged(category: category));
+                      .add(CategoryChanged(categoryId: position));
                 }),
                 SaveButton(() {
                   save(context);
@@ -62,7 +62,6 @@ class AddExpenseView extends StatelessWidget {
 
   void save(BuildContext context) {
     context.read<AddExpenseBloc>().add(EventAddBill(
-        name: _controllerUserName.text,
         description: _controllerDescription.text,
         amount: _controllerAmount.text,
         type: ExpenseEntity.TYPE_DEBIT,
@@ -117,21 +116,24 @@ class InputBox extends StatelessWidget {
 }
 
 class InputChooseCategory extends StatelessWidget {
-  final ExpenseCategory entity;
+  final int categoryId;
   final BoxDecoration _boxDecoration;
   final OnCategoryChosen categoryChosen;
 
-  InputChooseCategory(this.entity, this._boxDecoration, this.categoryChosen);
+  InputChooseCategory(this.categoryId, this._boxDecoration, this.categoryChosen);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddExpenseBloc, AddExpenseState>(
         builder: (context, state) {
+          ExpenseCategory expenseCategory;
+          if(state.categoryId != null)
+            expenseCategory = ChooseCategory.CATEGORY_LIST[state.categoryId];
           return GestureDetector(
             onTap: () async {
-              final ExpenseCategory expenseCategory = await Navigator.push(
+              final int categoryPosition = await Navigator.push(
                   context, MaterialPageRoute(builder: (context) => ChooseCategory()));
-              categoryChosen(expenseCategory);
+              categoryChosen(categoryPosition);
             },
             child: Container(
               margin: EdgeInsets.only(top: 20.0),
@@ -149,12 +151,12 @@ class InputChooseCategory extends StatelessWidget {
                     child: Row(
                       children: [
                         Circle(
-                          sourceName: state.expenseCategory != null ? state.expenseCategory.imageResource : "",
+                          sourceName: expenseCategory != null ? expenseCategory.imageResource : "",
                         ),
                         Container(
                           margin: EdgeInsets.only(left: 5),
                           child: Text(
-                            state.expenseCategory != null  ? state.expenseCategory.name  : "Select a category",
+                            expenseCategory != null  ? expenseCategory.name  : "Select a category",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         )

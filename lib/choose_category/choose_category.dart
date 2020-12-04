@@ -36,7 +36,7 @@ class ChooseCategory extends StatelessWidget {
             final ExpenseCategory entity = ChooseCategory.CATEGORY_LIST[position];
             return GestureDetector(
               onTap: (){
-                Navigator.pop(context , entity);
+                Navigator.pop(context , position);
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

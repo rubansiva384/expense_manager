@@ -1,5 +1,3 @@
-import 'package:expense_manager/ScrollApp.dart';
-import 'package:expense_manager/home/view/home_page.dart';
 import 'package:expense_manager/main/bloc/main_bloc.dart';
 import 'package:expense_manager/main/view/MainPage.dart';
 import 'package:expense_repository/expense_repository.dart';

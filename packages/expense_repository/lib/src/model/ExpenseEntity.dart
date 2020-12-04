@@ -8,8 +8,6 @@ class ExpenseEntity {
   static const TYPE_CREDIT = 1;
   static const TYPE_DEBIT = 2;
 
-  @JsonKey(name: MyDatabase.COLUMN_EXPENSE_NAME)
-  final String name;
   @JsonKey(name: MyDatabase.COLUMN_EXPENSE_DESCRIPTION)
   final String description;
   @JsonKey(name: MyDatabase.COLUMN_TIME)
@@ -18,11 +16,11 @@ class ExpenseEntity {
   final int amount;
   @JsonKey(name: MyDatabase.COLUMN_EXPENSE_TYPE)
   final int type;
-  @JsonKey(name: MyDatabase.COLUMN_IMAGE)
-  final String image;
+  @JsonKey(name: MyDatabase.COLUMN_EXPENSE_CATEGORY)
+  final int category;
 
   ExpenseEntity(
-      {this.name, this.description, this.dateTime, this.amount, this.type , this.image});
+      {this.description, this.dateTime, this.amount, this.type, this.category});
 
   factory ExpenseEntity.fromJson(Map<String, dynamic> json) =>
       _$ExpenseEntityFromJson(json);
@@ -36,7 +34,13 @@ class ExpenseEntity {
   String get visibleTimeHome{
     final time  = dateTime ?? 0;
     final format = DateFormat("MMM '-'dd");
-    return "${format.format(DateTime.fromMicrosecondsSinceEpoch(time))}";
+    return "${format.format(DateTime.fromMillisecondsSinceEpoch(time))}";
+  }
+
+  int get date{
+    final time  = dateTime ?? 0;
+    final format = DateFormat("dd");
+    return int.parse(format.format(DateTime.fromMillisecondsSinceEpoch(time)));
   }
 
 }

@@ -1,5 +1,6 @@
-import 'package:expense_manager/add_expense/view/add_expense_view.dart';
+import 'package:expense_manager/analytics_pie/analytics_pie_page.dart';
 import 'package:expense_manager/choose_category/choose_category.dart';
+import 'package:expense_manager/choose_category/model/ExpenseCategory.dart';
 import 'package:expense_manager/main/bloc/main_bloc.dart';
 import 'package:expense_manager/widgets/AppImage.dart';
 import 'package:expense_repository/expense_repository.dart';
@@ -26,8 +27,10 @@ class MainView extends StatelessWidget {
               child: ListView.builder(
                 itemBuilder: (context, int) {
                   ExpenseEntity entity = state.entities[int];
+                  ExpenseCategory category = ChooseCategory.CATEGORY_LIST[entity.category];
                   return ListRow(
                     entity: entity,
+                    expenseCategory: category,
                   );
                 },
                 itemCount: state.entities.length,
@@ -42,8 +45,9 @@ class MainView extends StatelessWidget {
 
 class ListRow extends StatelessWidget {
   final ExpenseEntity entity;
+  final ExpenseCategory expenseCategory;
 
-  ListRow({this.entity});
+  ListRow({this.entity , this.expenseCategory});
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +56,7 @@ class ListRow extends StatelessWidget {
         children: [
           Container(
             margin: EdgeInsets.all(10.0),
-            child: Circle(entity.image),
+            child: Circle(expenseCategory.imageResource),
           ),
           Expanded(
             child: Container(
@@ -62,7 +66,7 @@ class ListRow extends StatelessWidget {
                 children: [
                   Container(
                     child: Text(
-                      entity.name,
+                      entity.description,
                       style:
                           TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.left,
@@ -71,7 +75,7 @@ class ListRow extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      entity.description,
+                      expenseCategory.name,
                       style: TextStyle(fontSize: 15),
                     ),
                   )
@@ -139,9 +143,9 @@ class Circle extends StatelessWidget {
 }
 
 class DashBoarHeader extends StatelessWidget {
-  final TextStyle styleBold = TextStyle(
-      fontWeight: FontWeight.bold, color: Colors.white, fontSize: 18);
-  final TextStyle styleNormal = TextStyle(color: Colors.white , fontSize: 12);
+  final TextStyle styleBold =
+      TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 18);
+  final TextStyle styleNormal = TextStyle(color: Colors.white, fontSize: 12);
   final double borderWidth = 0.3;
   final Color borderColor = Colors.white;
 
@@ -163,11 +167,20 @@ class DashBoarHeader extends StatelessWidget {
               ),
               Align(
                 alignment: Alignment.centerRight,
-                child: Image(
-                  height: 25,
-                  width: 25,
-                  image: AssetImage(ChooseCategory.PACKAGE_NAME +
-                      "baseline_leaderboard_white_36dp.png"),
+                child: GestureDetector(
+                  onTap: () {
+                    final repo = RepositoryProvider.of<ExpenseRepository>(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AnalyticsPieChartPage(expenseRepository: repo,)));
+                  },
+                  child: Image(
+                    height: 25,
+                    width: 25,
+                    image: AssetImage(ChooseCategory.PACKAGE_NAME +
+                        "baseline_leaderboard_white_36dp.png"),
+                  ),
                 ),
               ),
             ],
@@ -175,7 +188,7 @@ class DashBoarHeader extends StatelessWidget {
           Container(
               height: 160,
               width: double.infinity,
-              margin: EdgeInsets.only(top: 20 , bottom: 20),
+              margin: EdgeInsets.only(top: 20, bottom: 20),
               decoration: BoxDecoration(
                   color: Colors.white10,
                   border: Border.all(color: borderColor, width: borderWidth),

@@ -4,16 +4,16 @@ class AddExpenseState {
   final String name;
   final String description;
   final String amount;
-  final ExpenseCategory expenseCategory;
+  final int categoryId;
 
-  AddExpenseState({this.name , this.description , this.amount , this.expenseCategory});
+  AddExpenseState({this.name , this.description , this.amount , this.categoryId});
 
-  AddExpenseState copyWith({String name , String description , String amount , ExpenseCategory category}){
+  AddExpenseState copyWith({String name , String description , String amount , ExpenseCategory category , int categoryId}){
     return AddExpenseState(
       name:  name ?? this.name,
       description:  description ?? this.description,
       amount: amount ?? this.amount,
-      expenseCategory: category ?? this.expenseCategory
+      categoryId: categoryId ?? this.categoryId
     );
   }
 }

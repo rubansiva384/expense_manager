@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:meta/meta.dart';
 import 'package:user_repository/user_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'authentication_event.dart';
