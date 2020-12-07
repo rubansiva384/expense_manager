@@ -8,7 +8,7 @@ import 'package:meta/meta.dart';
 
 part 'analytics_pie_event.dart';
 part 'analytics_pie_state.dart';
-
+// TODO change data based on chosen month
 class AnalyticsPieBloc extends Bloc<AnalyticsPieEvent, AnalyticsPieState> {
   final ExpenseRepository repository;
 
@@ -21,12 +21,13 @@ class AnalyticsPieBloc extends Bloc<AnalyticsPieEvent, AnalyticsPieState> {
     assert(repository != null);
 
     if(event is AnalyticsPieEventLoad){
-      final data = await repository.getList();
-      yield AnalyticsStateLoaded(entities: data , currentMonthPosition: 0);
+      final data = await repository.getList(event.month);
+      yield AnalyticsStateLoaded(entities: data , currentMonth: event.month);
     }
 
-    if(event is AnalyticsPieEventMonthChanged && state is AnalyticsStateLoaded){
-      final data = await repository.getList();
+    if(event is AnalyticsPieEventMonthChanged){
+      final data = await repository.getList(event.month);
+      yield AnalyticsStateLoaded(entities: data , currentMonth: event.month);
     }
 
   }

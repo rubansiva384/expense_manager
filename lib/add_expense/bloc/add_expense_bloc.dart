@@ -7,17 +7,17 @@ import 'package:meta/meta.dart';
 
 part 'add_expense_event.dart';
 part 'add_expense_state.dart';
-
+// TODO check mandatories are entered
 class AddExpenseBloc extends Bloc<AddExpenseEvent, AddExpenseState> {
   final ExpenseRepository expenseRepository;
-  AddExpenseBloc({this.expenseRepository}) : super(AddExpenseState());
+  AddExpenseBloc({this.expenseRepository}) : super(AddExpenseState(time: DateTime.now().millisecondsSinceEpoch));
 
   @override
   Stream<AddExpenseState> mapEventToState(
     AddExpenseEvent event,
   ) async* {
     if(event is EventAddBill){
-      ExpenseEntity expenseEntity = new ExpenseEntity( description: event.description , amount: int.parse(event.amount) , type: event.type , dateTime: event.time , category: state.categoryId  );
+      ExpenseEntity expenseEntity = new ExpenseEntity( description: event.description , amount: int.parse(event.amount) , type: event.type , dateTime: (state.time / 1000).round() , category: state.categoryId  );
       expenseRepository.addExpense(expenseEntity);
     }
     if(event is AmountChanged){
@@ -32,5 +32,9 @@ class AddExpenseBloc extends Bloc<AddExpenseEvent, AddExpenseState> {
     if(event is CategoryChanged){
       yield state.copyWith(categoryId: event.categoryId);
     }
+    if(event is TimeChanged){
+      yield state.copyWith(time: event.time);
+    }
+
   }
 }

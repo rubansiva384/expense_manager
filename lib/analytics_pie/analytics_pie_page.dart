@@ -7,12 +7,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AnalyticsPieChartPage extends StatelessWidget {
   final ExpenseRepository expenseRepository;
+  final int month;
 
-  AnalyticsPieChartPage({this.expenseRepository});
+  AnalyticsPieChartPage({this.expenseRepository , this.month});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(create: (_) => AnalyticsPieBloc(repository: expenseRepository)..add(AnalyticsPieEventLoad()),
+    return BlocProvider(create: (_) => AnalyticsPieBloc(repository: expenseRepository)..add(AnalyticsPieEventLoad(month: month)),
       child: AnalyticsChartView(),
     );
   }

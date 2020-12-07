@@ -173,7 +173,7 @@ class DashBoarHeader extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => AnalyticsPieChartPage(expenseRepository: repo,)));
+                            builder: (context) => AnalyticsPieChartPage(expenseRepository: repo, month: state,)));
                   },
                   child: Image(
                     height: 25,

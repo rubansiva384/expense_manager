@@ -20,7 +20,7 @@ class _AnalyticsChartViewState extends State<AnalyticsChartView> with SingleTick
             bottom: TabBar(
               onTap: (position) {
                 print("tapped on $position");
-                context.read<AnalyticsPieBloc>().add(AnalyticsPieEventMonthChanged(monthPosition: position));
+                context.read<AnalyticsPieBloc>().add(AnalyticsPieEventMonthChanged(month: position));
               },
               isScrollable: true,
               tabs: [

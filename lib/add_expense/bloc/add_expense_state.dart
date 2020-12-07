@@ -1,21 +1,24 @@
 part of 'add_expense_bloc.dart';
 
 class AddExpenseState {
-  final String name;
   final String description;
   final String amount;
   final int categoryId;
+  final int time;
 
-  AddExpenseState({this.name , this.description , this.amount , this.categoryId});
+  AddExpenseState({ this.description , this.amount , this.categoryId , this.time});
 
-  AddExpenseState copyWith({String name , String description , String amount , ExpenseCategory category , int categoryId}){
+  AddExpenseState copyWith({String name , String description , String amount , ExpenseCategory category , int categoryId , int time }){
     return AddExpenseState(
-      name:  name ?? this.name,
       description:  description ?? this.description,
       amount: amount ?? this.amount,
-      categoryId: categoryId ?? this.categoryId
+      categoryId: categoryId ?? this.categoryId ,
+      time: time ?? this.time
     );
   }
+
+
+
 }
 
 

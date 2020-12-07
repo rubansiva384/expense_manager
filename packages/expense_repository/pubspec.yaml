@@ -13,7 +13,6 @@ dependencies:
   path:
   intl:
 
-
   #flutter pub run build_runner build
   json_annotation:
 

@@ -8,8 +8,8 @@ import 'model/ExpenseEntity.dart';
 class ExpenseRepository{
 final _controller = StreamController<ExpenseRepositoryEvent>();
 
-  Future<List<ExpenseEntity>> getList() async{
-      return await MyDatabase.getInstance().getAllExpenses();
+  Future<List<ExpenseEntity>> getList(int month) async{
+      return await MyDatabase.getInstance().getAllExpensesByMonth(month);
   }
 
   Stream<ExpenseRepositoryEvent> get controller{

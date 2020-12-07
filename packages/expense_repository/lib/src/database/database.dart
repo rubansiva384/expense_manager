@@ -51,8 +51,24 @@ class MyDatabase{
     return products;
   }
 
+  Future<List<ExpenseEntity>> getAllExpensesByMonth(int month) async{
+    final Database db = await _getDatabaseInstance();
+    // final String query = 'select cast(strftime("%m" , $COLUMN_TIME ,"unixepoch") as int) as month from $TABLE_EXPENSE';
+    // print(query);
+    // final result = await db.rawQuery(query);
+    // print("result $result");
+    List<Map<String, dynamic>> list = await db.query(TABLE_EXPENSE , where: 'cast(strftime("%m" , $COLUMN_TIME ,"unixepoch") as int) = ?' , whereArgs: [month] );
+    List<ExpenseEntity> products = List<ExpenseEntity>();
+    list.forEach((element) {
+      products.add(ExpenseEntity.fromJson(element));
+      // print(element);
+    });
+    return products;
+  }
+
   Future<int> addExpense(ExpenseEntity expenseEntity) async{
     final Database db = await _getDatabaseInstance();
+    print("inserting entity => time : ${expenseEntity.dateTime}");
     return await db.insert(TABLE_EXPENSE, expenseEntity.toJson());
   }
 

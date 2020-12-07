@@ -36,7 +36,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       case AuthenticationStatus.authenticated:
         return AuthenticationState.authenticated(await _userRepository.getUser());
 
-      case AuthenticationStatus.unknown:
+      default:
         return AuthenticationState.unknown();
     }
   }

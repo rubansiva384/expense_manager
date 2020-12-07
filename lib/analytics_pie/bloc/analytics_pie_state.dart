@@ -11,14 +11,14 @@ class AnalyticsPieInitial extends AnalyticsPieState {
 
 class AnalyticsStateLoaded extends AnalyticsPieState{
   final List<ExpenseEntity> entities;
-  final int currentMonthPosition;
+  final int currentMonth;
 
-  AnalyticsStateLoaded({this.entities , this.currentMonthPosition});
+  AnalyticsStateLoaded({this.entities , this.currentMonth});
 
   AnalyticsStateLoaded copyWith({List<ExpenseEntity> entities , int currentMonthPosition}){
     return AnalyticsStateLoaded(
       entities: entities ?? this.entities,
-      currentMonthPosition: currentMonthPosition ?? this.currentMonthPosition
+        currentMonth: currentMonthPosition ?? this.currentMonth
     );
   }
 
