@@ -1,6 +1,7 @@
 import 'package:expense_manager/analytics_pie/bloc/analytics_pie_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/scheduler/ticker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
@@ -9,7 +10,7 @@ class AnalyticsChartView extends StatefulWidget {
   _AnalyticsChartViewState createState() => _AnalyticsChartViewState();
 }
 
-class _AnalyticsChartViewState extends State<AnalyticsChartView> with SingleTickerProviderStateMixin{
+class _AnalyticsChartViewState extends State<AnalyticsChartView> with TickerProviderStateMixin{
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AnalyticsPieBloc , AnalyticsPieState>(builder: (context , state){
@@ -24,7 +25,7 @@ class _AnalyticsChartViewState extends State<AnalyticsChartView> with SingleTick
               },
               isScrollable: true,
               tabs: [
-                Tab(text: "January",),
+                Tab(text: "January" , ),
                 Tab(text: "February",),
                 Tab(text: "March",),
                 Tab(text: "April",),
@@ -37,7 +38,7 @@ class _AnalyticsChartViewState extends State<AnalyticsChartView> with SingleTick
                 Tab(text: "November",),
                 Tab(text: "December",),
               ],
-              controller: TabController(length: 12 , vsync: this ,),
+              controller: TabController(length: 12 , vsync: this , initialIndex: state.currentMonth ?? 1),
             ),
           ),
           body: charts.PieChart(state.chartData ,

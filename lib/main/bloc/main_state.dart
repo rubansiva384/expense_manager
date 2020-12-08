@@ -21,7 +21,8 @@ class MainLoaded extends MainState{
       entities: list ?? this.entities,
       salary: salary ?? this.salary,
       spent: spent ?? this.spent,
-      available: available ?? this.available
+      available: available ?? this.available,
+      month: month ?? this.month
     );
   }
 

@@ -22,7 +22,7 @@ class MainView extends StatelessWidget {
         return Container(
             child: Column(
           children: [
-            DashBoarHeader(),
+            DashBoarHeader(state.month),
             Expanded(
               child: ListView.builder(
                 itemBuilder: (context, int) {
@@ -148,6 +148,9 @@ class DashBoarHeader extends StatelessWidget {
   final TextStyle styleNormal = TextStyle(color: Colors.white, fontSize: 12);
   final double borderWidth = 0.3;
   final Color borderColor = Colors.white;
+  final int month;
+
+  DashBoarHeader(this.month);
 
   @override
   Widget build(BuildContext context) {
@@ -173,7 +176,7 @@ class DashBoarHeader extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => AnalyticsPieChartPage(expenseRepository: repo, month: state,)));
+                            builder: (context) => AnalyticsPieChartPage(expenseRepository: repo, month: month,)));
                   },
                   child: Image(
                     height: 25,
