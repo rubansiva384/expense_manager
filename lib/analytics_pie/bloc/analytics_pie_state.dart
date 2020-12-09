@@ -1,3 +1,4 @@
+
 part of 'analytics_pie_bloc.dart';
 
 @immutable
@@ -10,7 +11,7 @@ class AnalyticsPieInitial extends AnalyticsPieState {
 }
 
 class AnalyticsStateLoaded extends AnalyticsPieState{
-  final List<ExpenseEntity> entities;
+  final List<AnalyticsEntity> entities;
   final int currentMonth;
 
   AnalyticsStateLoaded({this.entities , this.currentMonth});
@@ -22,17 +23,17 @@ class AnalyticsStateLoaded extends AnalyticsPieState{
     );
   }
 
-  List<Series<ExpenseEntity , int>> get chartData{
+  List<Series<AnalyticsEntity , int>> get chartData{
     return [
-      Series<ExpenseEntity, int>(
+      Series<AnalyticsEntity, int>(
         id: 'Sales',
-        domainFn: (ExpenseEntity sales, _) {
-          return sales.dateTime;
+        domainFn: (AnalyticsEntity sales, _) {
+          return sales.category;
         },
-        measureFn: (ExpenseEntity sales, _) => sales.amount,
+        measureFn: (AnalyticsEntity sales, _) => sales.total,
         data: entities,
-        // Set a label accessor to control the text of the arc label.
-        labelAccessorFn: (ExpenseEntity row, _) => '${row.date}: ${row.amount}',
+        // Set a label accessor to control the text of the arc label.+-
+        labelAccessorFn: (AnalyticsEntity row, _) => '${ChooseCategory.CATEGORY_LIST[row.category].name.substring(0, 5)}: ${row.total}',
       )
     ];
   }

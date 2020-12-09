@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:charts_flutter/flutter.dart';
+import 'package:expense_manager/choose_category/choose_category.dart';
 import 'package:expense_repository/expense_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
@@ -21,12 +22,12 @@ class AnalyticsPieBloc extends Bloc<AnalyticsPieEvent, AnalyticsPieState> {
     assert(repository != null);
 
     if(event is AnalyticsPieEventLoad){
-      final data = await repository.getList(event.month);
+      final List<AnalyticsEntity> data  = await repository.getAnalytics(event.month);
       yield AnalyticsStateLoaded(entities: data , currentMonth: event.month);
     }
 
     if(event is AnalyticsPieEventMonthChanged){
-      final data = await repository.getList(event.month);
+      final data = await repository.getAnalytics(event.month);
       yield AnalyticsStateLoaded(entities: data , currentMonth: event.month);
     }
 

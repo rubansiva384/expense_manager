@@ -62,7 +62,7 @@ class _AnalyticsChartViewState extends State<AnalyticsChartView>
               text: "December",
             ),
           ],
-          controller: TabController(length: 12, vsync: this),
+          controller: TabController(length: 12, vsync: this , initialIndex: null),
         ),
       ),
       body: AppChart(),
