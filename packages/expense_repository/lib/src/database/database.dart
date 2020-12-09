@@ -1,3 +1,4 @@
+import 'package:expense_repository/src/model/AnalyticsEntity.dart';
 import 'package:expense_repository/src/model/ExpenseEntity.dart';
 import 'package:flutter/widgets.dart';
 
@@ -11,6 +12,7 @@ class MyDatabase{
   static const COLUMN_EXPENSE_CATEGORY = "expense_category";
   static const COLUMN_EXPENSE_DESCRIPTION = "expense_description";
   static const COLUMN_EXPENSE_AMOUNT = "expense_amount";
+  static const COLUMN_ANALYTICS_TOTAL = "expense_total";
   static const COLUMN_TIME = "entered_time";
   static const COLUMN_EXPENSE_TYPE = "expense_type";
   static const COLUMN_IMAGE = "expense_image";
@@ -70,6 +72,17 @@ class MyDatabase{
     final Database db = await _getDatabaseInstance();
     print("inserting entity => time : ${expenseEntity.dateTime}");
     return await db.insert(TABLE_EXPENSE, expenseEntity.toJson());
+  }
+
+  Future<List<AnalyticsEntity>> getAnalytics(int month) async{
+    final Database db = await _getDatabaseInstance();
+    List<Map<String, dynamic>> list = await db.rawQuery("select sum($COLUMN_EXPENSE_AMOUNT) as  $COLUMN_ANALYTICS_TOTAL, $COLUMN_EXPENSE_CATEGORY  from $TABLE_EXPENSE where cast(strftime('%m' , $COLUMN_TIME ,'unixepoch') as int) = $month group by $COLUMN_EXPENSE_CATEGORY  ");
+    List<AnalyticsEntity> products = List<AnalyticsEntity>();
+    list.forEach((element) {
+      products.add(AnalyticsEntity.fromJson(element));
+      // print(element);
+    });
+    return products;
   }
 
 }
