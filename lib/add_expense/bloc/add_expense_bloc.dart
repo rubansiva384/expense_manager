@@ -33,6 +33,7 @@ class AddExpenseBloc extends Bloc<AddExpenseEvent, AddExpenseState> {
       yield state.copyWith(categoryId: event.categoryId);
     }
     if(event is TimeChanged){
+      print("time changed => ${event.time}");
       yield state.copyWith(time: event.time);
     }
 

@@ -32,7 +32,7 @@ class ExpenseEntity {
   }
 
   String get visibleTimeHome{
-    final time  = dateTime ?? 0;
+    final time  = dateTime * 1000 ?? 0;
     final format = DateFormat("MMM '-'dd");
     return "${format.format(DateTime.fromMillisecondsSinceEpoch(time))}";
   }
