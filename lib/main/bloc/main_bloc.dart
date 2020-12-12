@@ -6,8 +6,6 @@ import 'package:meta/meta.dart';
 
 part 'main_event.dart';
 part 'main_state.dart';
-// TODO add credit input
-// TODO make list based on credit debit type
 // TODO set income spent based on database
 class MainBloc extends Bloc<MainEvent, MainState> {
   final ExpenseRepository _expenseRepository;
@@ -24,8 +22,8 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     MainEvent event,
   ) async* {
     if(event is MainEventLoad){
-      List<ExpenseEntity> list = await _expenseRepository.getList(event.month);
-      yield MainLoaded(entities: list , month: event.month);
+      List<ExpenseEntity> list = await _expenseRepository.getList(event.time.month);
+      yield MainLoaded(entities: list , time: event.time);
     }
     if(event is MainEventNewBill && state is MainLoaded){
       MainLoaded currentState = state;

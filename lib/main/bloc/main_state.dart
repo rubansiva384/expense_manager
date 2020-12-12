@@ -13,16 +13,16 @@ class MainLoaded extends MainState{
   final String spent;
   final String available;
   List<ExpenseEntity> entities;
-  final int month;
-  MainLoaded({this.available , this.spent , this.salary , this.entities , this.month});
+  final DateTime time;
+  MainLoaded({this.available , this.spent , this.salary , this.entities , this.time});
 
-  MainLoaded copyWith({List<ExpenseEntity> list , String salary , String spent , String available}){
+  MainLoaded copyWith({List<ExpenseEntity> list , String salary , String spent , String available , DateTime time}){
     return MainLoaded(
       entities: list ?? this.entities,
       salary: salary ?? this.salary,
       spent: spent ?? this.spent,
       available: available ?? this.available,
-      month: month ?? this.month
+      time: time ?? this.time
     );
   }
 

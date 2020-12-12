@@ -1,4 +1,5 @@
 import 'package:expense_manager/add_expense/view/add_event_page.dart';
+import 'package:expense_manager/choose_category/model/ExpenseCategory.dart';
 import 'package:expense_repository/expense_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,20 +9,23 @@ import 'main_view.dart';
 class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final repo = RepositoryProvider.of<ExpenseRepository>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("Home"),
         actions: [
           ActionAdd(
             text: "Credit",
-            callback: () {},
+            callback: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => AddBillPage(expenseRepository: repo , type: ExpenseEntity.TYPE_CREDIT,)));
+            },
           ),
           ActionAdd(
             text: "Debit",
             callback: () {
-              final repo = RepositoryProvider.of<ExpenseRepository>(context);
               Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => AddBillPage(expenseRepository: repo,)));
+                  context, MaterialPageRoute(builder: (_) => AddBillPage(expenseRepository: repo,type: ExpenseEntity.TYPE_DEBIT,)));
             },
           )
         ],

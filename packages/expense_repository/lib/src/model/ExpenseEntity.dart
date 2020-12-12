@@ -28,7 +28,8 @@ class ExpenseEntity {
   Map<String, dynamic> toJson() => _$ExpenseEntityToJson(this);
 
   String get visibleAmount{
-    return "- ₹$amount";
+    final prefix = type == TYPE_DEBIT ? "- " : "";
+    return "$prefix₹$amount";
   }
 
   String get visibleTimeHome{

@@ -5,6 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 class AnalyticsChartView extends StatefulWidget {
+  final int month;
+
+  AnalyticsChartView({this.month});
+
   @override
   _AnalyticsChartViewState createState() => _AnalyticsChartViewState();
 }
@@ -13,6 +17,7 @@ class _AnalyticsChartViewState extends State<AnalyticsChartView>
     with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
+    final controller = TabController(length: 12, vsync: this , initialIndex: widget.month - 1);
     return Scaffold(
       appBar: AppBar(
         title: Text("Analytics"),
@@ -62,7 +67,7 @@ class _AnalyticsChartViewState extends State<AnalyticsChartView>
               text: "December",
             ),
           ],
-          controller: TabController(length: 12, vsync: this , initialIndex: null),
+          controller: controller,
         ),
       ),
       body: AppChart(),

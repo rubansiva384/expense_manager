@@ -14,7 +14,7 @@ class AnalyticsPieChartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(create: (_) => AnalyticsPieBloc(repository: expenseRepository)..add(AnalyticsPieEventLoad(month: month)),
-      child: AnalyticsChartView(),
+      child: AnalyticsChartView(month: month,),
     );
   }
 }

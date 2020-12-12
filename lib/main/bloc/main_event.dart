@@ -4,9 +4,9 @@ part of 'main_bloc.dart';
 abstract class MainEvent {}
 
 class MainEventLoad extends MainEvent{
-  final int month;
+  final DateTime time;
 
-  MainEventLoad({this.month});
+  MainEventLoad({this.time});
 }
 
 class MainEventNewBill extends MainEvent{

@@ -9,7 +9,6 @@ import 'package:meta/meta.dart';
 
 part 'analytics_pie_event.dart';
 part 'analytics_pie_state.dart';
-// TODO change data based on chosen month
 class AnalyticsPieBloc extends Bloc<AnalyticsPieEvent, AnalyticsPieState> {
   final ExpenseRepository repository;
 

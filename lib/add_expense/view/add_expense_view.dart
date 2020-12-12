@@ -17,8 +17,11 @@ class AddExpenseView extends StatelessWidget {
   static const String LABEL_CATEGORY = "CATEGORY *";
   static const String LABEL_AMOUNT = "AMOUNT *";
   static const String LABEL_DESCRIPTION = "DESCRIPTION";
+  final int expenseType;
   final BoxDecoration _boxDecoration =
       BoxDecoration(border: Border.all(width: 1.3, color: Colors.black26));
+
+  AddExpenseView({this.expenseType});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +51,7 @@ class AddExpenseView extends StatelessWidget {
                   context
                       .read<AddExpenseBloc>()
                       .add(CategoryChanged(categoryId: position));
-                }),
+                } , expenseType),
                 SaveButton(() {
                   save(context);
                 }),
@@ -64,7 +67,7 @@ class AddExpenseView extends StatelessWidget {
     context.read<AddExpenseBloc>().add(EventAddBill(
         description: _controllerDescription.text,
         amount: _controllerAmount.text,
-        type: ExpenseEntity.TYPE_DEBIT
+        type: expenseType
     ));
     Navigator.pop(context);
   }
@@ -115,10 +118,11 @@ class InputBox extends StatelessWidget {
 
 class InputChooseCategory extends StatelessWidget {
   final int categoryId;
+  final int expenseType;
   final BoxDecoration _boxDecoration;
   final OnCategoryChosen categoryChosen;
 
-  InputChooseCategory(this.categoryId, this._boxDecoration, this.categoryChosen);
+  InputChooseCategory(this.categoryId, this._boxDecoration, this.categoryChosen , this.expenseType);
 
   @override
   Widget build(BuildContext context) {
@@ -126,11 +130,11 @@ class InputChooseCategory extends StatelessWidget {
         builder: (context, state) {
           ExpenseCategory expenseCategory;
           if(state.categoryId != null)
-            expenseCategory = ChooseCategory.CATEGORY_LIST[state.categoryId];
+            expenseCategory = expenseType == ExpenseEntity.TYPE_DEBIT ? ChooseCategory.CATEGORY_LIST[state.categoryId] : ChooseCategory.INCOME_LIST[state.categoryId];
           return GestureDetector(
             onTap: () async {
               final int categoryPosition = await Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => ChooseCategory()));
+                  context, MaterialPageRoute(builder: (context) => ChooseCategory(type: this.expenseType,)));
               categoryChosen(categoryPosition);
             },
             child: Container(

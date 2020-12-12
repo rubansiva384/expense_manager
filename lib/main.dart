@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 void main() {
   Bloc.observer = MyObserver();
   final repo = ExpenseRepository();
-  final thisMonth = DateTime.now().month;
+  final thisMonth = DateTime.now();
   runApp(
       // App(userRepository: UserRepository() , authenticationRepository: AuthenticationRepository(),)
       //MainPage(ExpenseRepository())
@@ -16,7 +16,7 @@ void main() {
     home: RepositoryProvider.value(
       value: repo,
       child: BlocProvider(
-        create: (_) => MainBloc(repo)..add(MainEventLoad(month: thisMonth)),
+        create: (_) => MainBloc(repo)..add(MainEventLoad(time: thisMonth)),
         child: MainPage(),
       ),
     ),

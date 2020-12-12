@@ -7,8 +7,10 @@ import 'package:expense_repository/expense_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:intl/intl.dart';
+//TODO make credit debit buttons clickable
 class MainView extends StatelessWidget {
+
   Widget build(BuildContext context) {
     // ignore: missing_return
     return BlocBuilder<MainBloc, MainState>(builder: (context, state) {
@@ -22,12 +24,12 @@ class MainView extends StatelessWidget {
         return Container(
             child: Column(
           children: [
-            DashBoarHeader(state.month),
+            DashBoarHeader(state.time),
             Expanded(
               child: ListView.builder(
                 itemBuilder: (context, int) {
                   ExpenseEntity entity = state.entities[int];
-                  ExpenseCategory category = ChooseCategory.CATEGORY_LIST[entity.category];
+                  ExpenseCategory category = entity.type == ExpenseEntity.TYPE_DEBIT ? ChooseCategory.CATEGORY_LIST[entity.category] : ChooseCategory.INCOME_LIST[entity.category] ;
                   return ListRow(
                     entity: entity,
                     expenseCategory: category,
@@ -94,7 +96,7 @@ class ListRow extends StatelessWidget {
                   child: Text(
                     entity.visibleAmount,
                     style: TextStyle(
-                        color: Colors.red,
+                        color: entity.type == ExpenseEntity.TYPE_DEBIT ?  Colors.red : Colors.green,
                         fontSize: 18,
                         fontWeight: FontWeight.bold),
                     textAlign: TextAlign.left,
@@ -148,7 +150,7 @@ class DashBoarHeader extends StatelessWidget {
   final TextStyle styleNormal = TextStyle(color: Colors.white, fontSize: 12);
   final double borderWidth = 0.3;
   final Color borderColor = Colors.white;
-  final int month;
+  final DateTime month;
 
   DashBoarHeader(this.month);
 
@@ -164,7 +166,7 @@ class DashBoarHeader extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  "Apr , 2020",
+                  DateFormat("MMM , yyyy").format(month),
                   style: TextStyle(color: Colors.white, fontSize: 15),
                 ),
               ),
@@ -176,7 +178,7 @@ class DashBoarHeader extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => AnalyticsPieChartPage(expenseRepository: repo, month: month,)));
+                            builder: (context) => AnalyticsPieChartPage(expenseRepository: repo, month: month.month,)));
                   },
                   child: Image(
                     height: 25,
@@ -242,7 +244,7 @@ class DashBoarHeader extends StatelessWidget {
                                 Expanded(
                                   flex: 3,
                                   child: Text(
-                                    "Salary : ",
+                                    "Income : ",
                                     style: styleNormal,
                                   ),
                                 ),

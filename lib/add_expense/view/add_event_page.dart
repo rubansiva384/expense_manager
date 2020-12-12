@@ -7,8 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddBillPage extends StatelessWidget {
   final ExpenseRepository expenseRepository;
+  final int type;
 
-  AddBillPage({this.expenseRepository});
+  AddBillPage({this.expenseRepository , this.type});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +18,7 @@ class AddBillPage extends StatelessWidget {
       ),
       body: BlocProvider(
         create: (_) => AddExpenseBloc(expenseRepository: expenseRepository),
-        child: AddExpenseView(),
+        child: AddExpenseView(expenseType: type,),
       ),
     );
   }
