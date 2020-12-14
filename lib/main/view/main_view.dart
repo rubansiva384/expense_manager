@@ -244,14 +244,14 @@ class DashBoarHeader extends StatelessWidget {
                                 child: Row(
                                   children: [
                                     Expanded(
-                                      flex: 3,
+                                      flex: 4,
                                       child: Text(
                                         "Income : ",
                                         style: styleNormal,
                                       ),
                                     ),
                                     Expanded(
-                                      flex: 7,
+                                      flex: 6,
                                       child: Text(
                                         "\$ ${state.salary}",
                                         style: styleBold,
@@ -262,16 +262,17 @@ class DashBoarHeader extends StatelessWidget {
                               ),
                               Expanded(
                                 child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     Expanded(
-                                      flex: 3,
+                                      flex: 4,
                                       child: Text(
                                         "Spent : ",
                                         style: styleNormal,
                                       ),
                                     ),
                                     Expanded(
-                                      flex: 7,
+                                      flex: 6,
                                       child: Text("\$ ${state.spent}", style: styleBold),
                                     )
                                   ],

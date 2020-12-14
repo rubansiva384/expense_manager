@@ -12,7 +12,7 @@ class MainLoaded extends MainState{
   final String salary;
   final String spent;
   final String available;
-  List<ExpenseEntity> entities;
+  final List<ExpenseEntity> entities;
   final DateTime time;
   MainLoaded({this.available , this.spent , this.salary , this.entities , this.time});
 

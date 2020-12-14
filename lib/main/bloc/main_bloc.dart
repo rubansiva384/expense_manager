@@ -25,24 +25,29 @@ class MainBloc extends Bloc<MainEvent, MainState> {
       List<ExpenseEntity> list = await _expenseRepository.getList(event.time.month);
       MainLoaded mainEvent = MainLoaded(entities: list , time: event.time);
       List<Map<String , dynamic>> maps = await _expenseRepository.getInOut(event.time.month);
+      int available = 0;
       if(maps.length > 0){
+        int income = 0;
+        int spent = 0;
         if(maps[0][MyDatabase.COLUMN_EXPENSE_TYPE] == ExpenseEntity.TYPE_DEBIT ){
-          final amount = maps[0][MyDatabase.COLUMN_ANALYTICS_TOTAL];
-          mainEvent = mainEvent.copyWith(spent: amount.toString());
+          spent = maps[0][MyDatabase.COLUMN_ANALYTICS_TOTAL];
+          mainEvent = mainEvent.copyWith(spent: spent.toString());
         }else{
-          final amount = maps[0][MyDatabase.COLUMN_ANALYTICS_TOTAL];
-          mainEvent = mainEvent.copyWith(salary: amount.toString());
+          income = maps[0][MyDatabase.COLUMN_ANALYTICS_TOTAL];
+          mainEvent = mainEvent.copyWith(salary: income.toString());
         }
         if(maps.length > 1){
           if(maps[1][MyDatabase.COLUMN_EXPENSE_TYPE] == ExpenseEntity.TYPE_DEBIT ){
-            final amount = maps[1][MyDatabase.COLUMN_ANALYTICS_TOTAL];
-            mainEvent = mainEvent.copyWith(spent: amount.toString());
+            spent = maps[1][MyDatabase.COLUMN_ANALYTICS_TOTAL];
+            mainEvent = mainEvent.copyWith(spent: spent.toString());
           }else{
-            final amount = maps[1][MyDatabase.COLUMN_ANALYTICS_TOTAL];
-            mainEvent = mainEvent.copyWith(salary: amount.toString());
+            income = maps[1][MyDatabase.COLUMN_ANALYTICS_TOTAL];
+            mainEvent = mainEvent.copyWith(salary: income.toString());
           }
         }
+        available = income - spent;
       }
+      mainEvent = mainEvent.copyWith(available: available.toString());
       yield mainEvent;
     }
     if(event is MainEventNewBill && state is MainLoaded){
