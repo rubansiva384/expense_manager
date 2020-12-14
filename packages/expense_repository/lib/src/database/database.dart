@@ -85,4 +85,11 @@ class MyDatabase{
     return products;
   }
 
+
+Future<List<Map<String, dynamic>>> getIncome(int month) async{
+    final Database db = await _getDatabaseInstance();
+    List<Map<String, dynamic>> list = await db.rawQuery("select sum($COLUMN_EXPENSE_AMOUNT) as $COLUMN_ANALYTICS_TOTAL , $COLUMN_EXPENSE_TYPE  from $TABLE_EXPENSE where cast(strftime('%m' , $COLUMN_TIME ,'unixepoch') as int) = $month group by $COLUMN_EXPENSE_TYPE  ");
+    return list;
+  }
+
 }

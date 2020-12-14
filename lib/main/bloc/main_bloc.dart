@@ -23,7 +23,27 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   ) async* {
     if(event is MainEventLoad){
       List<ExpenseEntity> list = await _expenseRepository.getList(event.time.month);
-      yield MainLoaded(entities: list , time: event.time);
+      MainLoaded mainEvent = MainLoaded(entities: list , time: event.time);
+      List<Map<String , dynamic>> maps = await _expenseRepository.getInOut(event.time.month);
+      if(maps.length > 0){
+        if(maps[0][MyDatabase.COLUMN_EXPENSE_TYPE] == ExpenseEntity.TYPE_DEBIT ){
+          final amount = maps[0][MyDatabase.COLUMN_ANALYTICS_TOTAL];
+          mainEvent = mainEvent.copyWith(spent: amount.toString());
+        }else{
+          final amount = maps[0][MyDatabase.COLUMN_ANALYTICS_TOTAL];
+          mainEvent = mainEvent.copyWith(salary: amount.toString());
+        }
+        if(maps.length > 1){
+          if(maps[1][MyDatabase.COLUMN_EXPENSE_TYPE] == ExpenseEntity.TYPE_DEBIT ){
+            final amount = maps[1][MyDatabase.COLUMN_ANALYTICS_TOTAL];
+            mainEvent = mainEvent.copyWith(spent: amount.toString());
+          }else{
+            final amount = maps[1][MyDatabase.COLUMN_ANALYTICS_TOTAL];
+            mainEvent = mainEvent.copyWith(salary: amount.toString());
+          }
+        }
+      }
+      yield mainEvent;
     }
     if(event is MainEventNewBill && state is MainLoaded){
       MainLoaded currentState = state;

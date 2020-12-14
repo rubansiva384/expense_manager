@@ -156,133 +156,139 @@ class DashBoarHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(color: Colors.blue),
-      padding: EdgeInsets.all(20.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+    return BlocBuilder<MainBloc , MainState>(builder: (context , state){
+      if(state is MainLoaded){
+        return Container(
+          decoration: BoxDecoration(color: Colors.blue),
+          padding: EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: Text(
-                  DateFormat("MMM , yyyy").format(month),
-                  style: TextStyle(color: Colors.white, fontSize: 15),
-                ),
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: GestureDetector(
-                  onTap: () {
-                    final repo = RepositoryProvider.of<ExpenseRepository>(context);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => AnalyticsPieChartPage(expenseRepository: repo, month: month.month,)));
-                  },
-                  child: Image(
-                    height: 25,
-                    width: 25,
-                    image: AssetImage(ChooseCategory.PACKAGE_NAME +
-                        "baseline_leaderboard_white_36dp.png"),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Container(
-              height: 160,
-              width: double.infinity,
-              margin: EdgeInsets.only(top: 20, bottom: 20),
-              decoration: BoxDecoration(
-                  color: Colors.white10,
-                  border: Border.all(color: borderColor, width: borderWidth),
-                  borderRadius: BorderRadius.all(Radius.circular(5.0))),
-              child: Row(
+              Row(
                 children: [
                   Expanded(
-                    child: Container(
-                      padding: EdgeInsets.all(20.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Container(
-                              width: 30,
-                              height: 30,
-                              child: Image(
-                                image: AssetImage(ChooseCategory.PACKAGE_NAME +
-                                    "baseline_account_balance_wallet_white_36dp.png"),
-                              ),
-                            ),
-                          ),
-                          Text(
-                            "Available balance",
-                            style: styleNormal,
-                          ),
-                          Text(
-                            "\$ 4,500",
-                            style: styleBold,
-                          ),
-                        ],
-                      ),
+                    child: Text(
+                      DateFormat("MMM , yyyy").format(month),
+                      style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
                   ),
-                  VerticalDivider(
-                    width: borderWidth,
-                    color: borderColor,
-                  ),
-                  Expanded(
-                    child: Container(
-                      padding: EdgeInsets.all(20.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  flex: 3,
-                                  child: Text(
-                                    "Income : ",
-                                    style: styleNormal,
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 7,
-                                  child: Text(
-                                    "\$ 50,000",
-                                    style: styleBold,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  flex: 3,
-                                  child: Text(
-                                    "Spent : ",
-                                    style: styleNormal,
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 7,
-                                  child: Text("\$ 50,000", style: styleBold),
-                                )
-                              ],
-                            ),
-                          )
-                        ],
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: GestureDetector(
+                      onTap: () {
+                        final repo = RepositoryProvider.of<ExpenseRepository>(context);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AnalyticsPieChartPage(expenseRepository: repo, month: month.month,)));
+                      },
+                      child: Image(
+                        height: 25,
+                        width: 25,
+                        image: AssetImage(ChooseCategory.PACKAGE_NAME +
+                            "baseline_leaderboard_white_36dp.png"),
                       ),
                     ),
                   ),
                 ],
-              ))
-        ],
-      ),
-    );
+              ),
+              Container(
+                  height: 160,
+                  width: double.infinity,
+                  margin: EdgeInsets.only(top: 20, bottom: 20),
+                  decoration: BoxDecoration(
+                      color: Colors.white10,
+                      border: Border.all(color: borderColor, width: borderWidth),
+                      borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.all(20.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  width: 30,
+                                  height: 30,
+                                  child: Image(
+                                    image: AssetImage(ChooseCategory.PACKAGE_NAME +
+                                        "baseline_account_balance_wallet_white_36dp.png"),
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                "Available balance",
+                                style: styleNormal,
+                              ),
+                              Text(
+                                "\$ ${state.available}",
+                                style: styleBold,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      VerticalDivider(
+                        width: borderWidth,
+                        color: borderColor,
+                      ),
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.all(20.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 3,
+                                      child: Text(
+                                        "Income : ",
+                                        style: styleNormal,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 7,
+                                      child: Text(
+                                        "\$ ${state.salary}",
+                                        style: styleBold,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 3,
+                                      child: Text(
+                                        "Spent : ",
+                                        style: styleNormal,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 7,
+                                      child: Text("\$ ${state.spent}", style: styleBold),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ))
+            ],
+          ),
+        );
+      }
+
+      return CircularProgressIndicator();
+    });
   }
 }

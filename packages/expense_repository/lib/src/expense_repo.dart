@@ -21,6 +21,10 @@ final _controller = StreamController<ExpenseRepositoryEvent>();
     return _controller.stream;
   }
 
+  Future<List<Map<String, dynamic>>> getInOut(int month) async{
+    return await MyDatabase.getInstance().getIncome(month);
+  }
+
   addExpense(ExpenseEntity expenseEntity) async{
     int result = await MyDatabase.getInstance().addExpense(expenseEntity);
     if(result != -1)
