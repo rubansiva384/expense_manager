@@ -28,34 +28,36 @@ class AddExpenseView extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(color: Colors.black12),
       child: Container(
-        margin: EdgeInsets.all(45),
         child: Center(
           child: Container(
+            margin: EdgeInsets.only(left: 30.0, right: 30.0 ),
             padding: EdgeInsets.only(left: 30.0, right: 30.0 , bottom: 20.0),
             decoration: BoxDecoration(color: Colors.white),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                InputBox(
-                  label: LABEL_DESCRIPTION,
-                  controller: _controllerDescription,
-                  boxDecoration: _boxDecoration,
+            child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    InputBox(
+                      label: LABEL_DESCRIPTION,
+                      controller: _controllerDescription,
+                      boxDecoration: _boxDecoration,
+                    ),
+                    InputDateTime(_boxDecoration),
+                    InputBox(
+                      label: LABEL_AMOUNT,
+                      controller: _controllerAmount,
+                      boxDecoration: _boxDecoration,
+                    ),
+                    InputChooseCategory(null, _boxDecoration, (position) {
+                      context
+                          .read<AddExpenseBloc>()
+                          .add(CategoryChanged(categoryId: position));
+                    } , expenseType),
+                    SaveButton(() {
+                      save(context);
+                    }),
+                  ],
                 ),
-                InputDateTime(_boxDecoration),
-                InputBox(
-                  label: LABEL_AMOUNT,
-                  controller: _controllerAmount,
-                  boxDecoration: _boxDecoration,
-                ),
-                InputChooseCategory(null, _boxDecoration, (position) {
-                  context
-                      .read<AddExpenseBloc>()
-                      .add(CategoryChanged(categoryId: position));
-                } , expenseType),
-                SaveButton(() {
-                  save(context);
-                }),
-              ],
             ),
           ),
         ),
@@ -270,11 +272,11 @@ class Circle extends StatelessWidget {
           ),
           Center(
             child: Container(
-              child: Image(
+              child: sourceName != "" ? Image(
                 width: 20,
                 image: AssetImage(
                     ChooseCategory.PACKAGE_NAME + sourceName + ".png"),
-              ),
+              ): null,
             ),
           )
         ],
