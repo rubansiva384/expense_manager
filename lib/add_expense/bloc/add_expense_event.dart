@@ -28,6 +28,12 @@ class DescriptionChange extends AddExpenseEvent{
   DescriptionChange({this.desc});
 }
 
+class AmountChange extends AddExpenseEvent{
+  final String desc;
+
+  AmountChange({this.desc});
+}
+
 class NameChanged extends AddExpenseEvent{
   final String name;
 

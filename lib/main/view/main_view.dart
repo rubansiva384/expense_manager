@@ -8,7 +8,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-//TODO make credit debit buttons clickable
 class MainView extends StatelessWidget {
 
   Widget build(BuildContext context) {

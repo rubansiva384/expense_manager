@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
+
+// TODO make the list legend info
 class AnalyticsChartView extends StatefulWidget {
   final int month;
 

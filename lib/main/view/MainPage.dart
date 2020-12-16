@@ -43,14 +43,15 @@ class ActionAdd extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Padding(
-        padding: EdgeInsets.all(15.0),
-        child: Center(
-            child: GestureDetector(
-          child: Text("$text"),
-          onTap: callback,
-        )),
+    return GestureDetector(
+      onTap: callback,
+      child:  Container(
+        child: Padding(
+          padding: EdgeInsets.all(15.0),
+          child: Center(
+            child: Text("$text"),
+          ),
+        ),
       ),
     );
   }

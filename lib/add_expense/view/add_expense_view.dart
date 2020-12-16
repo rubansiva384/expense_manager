@@ -16,7 +16,7 @@ class AddExpenseView extends StatelessWidget {
   static const String LABEL_TIME = "TIME *";
   static const String LABEL_CATEGORY = "CATEGORY *";
   static const String LABEL_AMOUNT = "AMOUNT *";
-  static const String LABEL_DESCRIPTION = "DESCRIPTION";
+  static const String LABEL_DESCRIPTION = "DESCRIPTION *";
   final int expenseType;
   final BoxDecoration _boxDecoration =
       BoxDecoration(border: Border.all(width: 1.3, color: Colors.black26));
@@ -37,14 +37,12 @@ class AddExpenseView extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    InputBox(
-                      label: LABEL_DESCRIPTION,
+                    InputDescription(
                       controller: _controllerDescription,
                       boxDecoration: _boxDecoration,
                     ),
                     InputDateTime(_boxDecoration),
-                    InputBox(
-                      label: LABEL_AMOUNT,
+                    InputAmount(
                       controller: _controllerAmount,
                       boxDecoration: _boxDecoration,
                     ),
@@ -66,55 +64,105 @@ class AddExpenseView extends StatelessWidget {
   }
 
   void save(BuildContext context) {
-    context.read<AddExpenseBloc>().add(EventAddBill(
-        description: _controllerDescription.text,
-        amount: _controllerAmount.text,
-        type: expenseType
-    ));
-    Navigator.pop(context);
+    final state = context
+        .read<AddExpenseBloc>()
+        .state;
+    if (state.descriptionBox.pure || state.amountBox.pure || state.categoryId == null) {
+        print("make sure all mandatories are entered");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            content: Text('make sure all mandatories are entered'),
+          ),
+        );
+    } else {
+      context.read<AddExpenseBloc>().add(EventAddBill(
+          description: _controllerDescription.text,
+          amount: _controllerAmount.text,
+          type: expenseType
+      ));
+      Navigator.pop(context);
+    }
   }
 }
 
-class InputBox extends StatelessWidget {
-  final String label;
+class InputAmount extends StatelessWidget {
   final TextEditingController controller;
   final BoxDecoration boxDecoration;
 
-  InputBox({this.controller, this.label, this.boxDecoration});
+  InputAmount({this.controller, this.boxDecoration});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              padding: EdgeInsets.only(top: 20.0, bottom: 5),
-              child: Text(label),
-            )),
-        Container(
-          decoration: boxDecoration,
-          child: TextField(
-            controller: controller,
-            keyboardType: this.label == AddExpenseView.LABEL_AMOUNT ? TextInputType.number : TextInputType.text,
-            onChanged: (text) {
-             if (this.label == AddExpenseView.LABEL_DESCRIPTION) {
+    return   BlocBuilder < AddExpenseBloc , AddExpenseState> (builder: (context , state){
+     return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                padding: EdgeInsets.only(top: 20.0, bottom: 5),
+                child: Text(AddExpenseView.LABEL_AMOUNT),
+              )),
+          Container(
+            decoration: boxDecoration,
+            child: TextField(
+              controller: controller,
+              keyboardType:TextInputType.number,
+              onChanged: (text) {
+                context
+                    .read<AddExpenseBloc>()
+                    .add(AmountChange(desc: text));
+              },
+              decoration: InputDecoration(
+                  contentPadding: EdgeInsets.all(5.0),
+                  errorText: state.amountBox.invalid ? "should not be empty" : null,
+                  border: InputBorder.none),
+            ),
+          )
+        ],
+      );
+    });
+  }
+}
+
+class InputDescription extends StatelessWidget {
+  final TextEditingController controller;
+  final BoxDecoration boxDecoration;
+
+  InputDescription({this.controller, this.boxDecoration});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder < AddExpenseBloc , AddExpenseState> (builder: (context , state){
+      return  Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                  padding: EdgeInsets.only(top: 20.0, bottom: 5),
+                  child: Text(AddExpenseView.LABEL_CATEGORY)
+              )),
+          Container(
+            decoration: boxDecoration,
+            child: TextField(
+              controller: controller,
+              keyboardType: TextInputType.text,
+              onChanged: (text) {
                 context
                     .read<AddExpenseBloc>()
                     .add(DescriptionChange(desc: text));
-              } else if (this.label == AddExpenseView.LABEL_AMOUNT) {
-                context.read<AddExpenseBloc>().add(AmountChanged(amount: text));
-              }
-            },
-            decoration: InputDecoration(
-                contentPadding: EdgeInsets.all(5.0),
-                errorText: null,
-                border: InputBorder.none),
-          ),
-        )
-      ],
-    );
+              },
+              decoration: InputDecoration(
+                  contentPadding: EdgeInsets.all(5.0),
+                  errorText: state.descriptionBox.invalid ? "Should not be empty" : null,
+                  border: InputBorder.none),
+            ),
+          )
+        ],
+      );
+    });
   }
 }
 
@@ -137,6 +185,7 @@ class InputChooseCategory extends StatelessWidget {
             onTap: () async {
               final int categoryPosition = await Navigator.push(
                   context, MaterialPageRoute(builder: (context) => ChooseCategory(type: this.expenseType,)));
+              categoryChosen(categoryPosition);
               categoryChosen(categoryPosition);
             },
             child: Container(
