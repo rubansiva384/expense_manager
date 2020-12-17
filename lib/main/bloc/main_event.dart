@@ -15,3 +15,9 @@ class MainEventNewBill extends MainEvent{
   MainEventNewBill({this.expenseEntity});
 }
 
+class MainEventMonthChanged extends MainEvent{
+  final DateTime time;
+
+  MainEventMonthChanged({this.time});
+}
+

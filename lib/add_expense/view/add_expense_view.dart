@@ -143,7 +143,7 @@ class InputDescription extends StatelessWidget {
               alignment: Alignment.centerLeft,
               child: Container(
                   padding: EdgeInsets.only(top: 20.0, bottom: 5),
-                  child: Text(AddExpenseView.LABEL_CATEGORY)
+                  child: Text(AddExpenseView.LABEL_DESCRIPTION)
               )),
           Container(
             decoration: boxDecoration,
