@@ -84,6 +84,7 @@ class AddExpenseView extends StatelessWidget {
       Navigator.pop(context);
     }
   }
+
 }
 
 class InputAmount extends StatelessWidget {

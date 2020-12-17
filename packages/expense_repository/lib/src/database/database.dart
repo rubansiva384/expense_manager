@@ -10,6 +10,7 @@ class MyDatabase{
   static MyDatabase _myDatabase;
   static const COLUMN_EXPENSE_NAME = "expense_name";
   static const COLUMN_EXPENSE_CATEGORY = "expense_category";
+  static const COLUMN_EXPENSE_COUNT = "expense_row_count";
   static const COLUMN_EXPENSE_DESCRIPTION = "expense_description";
   static const COLUMN_EXPENSE_AMOUNT = "expense_amount";
   static const COLUMN_ANALYTICS_TOTAL = "expense_total";
@@ -76,7 +77,7 @@ class MyDatabase{
 
   Future<List<AnalyticsEntity>> getAnalytics(int month) async{
     final Database db = await _getDatabaseInstance();
-    List<Map<String, dynamic>> list = await db.rawQuery("select sum($COLUMN_EXPENSE_AMOUNT) as  $COLUMN_ANALYTICS_TOTAL, $COLUMN_EXPENSE_CATEGORY  from $TABLE_EXPENSE where cast(strftime('%m' , $COLUMN_TIME ,'unixepoch') as int) = $month group by $COLUMN_EXPENSE_CATEGORY  ");
+    List<Map<String, dynamic>> list = await db.rawQuery("select sum($COLUMN_EXPENSE_AMOUNT) as  $COLUMN_ANALYTICS_TOTAL, $COLUMN_EXPENSE_CATEGORY , count(*) as $COLUMN_EXPENSE_COUNT  from $TABLE_EXPENSE where cast(strftime('%m' , $COLUMN_TIME ,'unixepoch') as int) = $month group by $COLUMN_EXPENSE_CATEGORY  ");
     List<AnalyticsEntity> products = List<AnalyticsEntity>();
     list.forEach((element) {
       products.add(AnalyticsEntity.fromJson(element));

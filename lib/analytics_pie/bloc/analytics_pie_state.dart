@@ -33,7 +33,7 @@ class AnalyticsStateLoaded extends AnalyticsPieState{
         measureFn: (AnalyticsEntity sales, _) => sales.total,
         data: entities,
         // Set a label accessor to control the text of the arc label.+-
-        labelAccessorFn: (AnalyticsEntity row, _) => '${ChooseCategory.CATEGORY_LIST[row.category].name.substring(0, 5)}: ${row.total}',
+        labelAccessorFn: (AnalyticsEntity row, _) => '${ChooseCategory.CATEGORY_LIST[row.category].name}',
       )
     ];
   }
