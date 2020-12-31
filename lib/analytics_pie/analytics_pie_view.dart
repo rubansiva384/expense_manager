@@ -1,18 +1,21 @@
 import 'package:expense_manager/analytics_pie/bloc/analytics_pie_bloc.dart';
+import 'package:expense_manager/analytics_pie/widget/daily_analysis_cumulative.dart';
+import 'package:expense_manager/charts/daily/bloc/daily_bar_chart_bloc.dart';
+import 'package:expense_manager/charts/daily/daily_bar_chart.dart';
 import 'package:expense_manager/choose_category/choose_category.dart';
 import 'package:expense_manager/choose_category/model/ExpenseCategory.dart';
+import 'package:expense_manager/util/Utility.dart';
 import 'package:expense_manager/widgets/AppImage.dart';
 import 'package:expense_repository/expense_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 
 // TODO make the list legend info
 class AnalyticsChartView extends StatefulWidget {
-  final int month;
+  final DateTime time;
 
-  AnalyticsChartView({this.month});
+  AnalyticsChartView({this.time});
 
   @override
   _AnalyticsChartViewState createState() => _AnalyticsChartViewState();
@@ -22,55 +25,36 @@ class _AnalyticsChartViewState extends State<AnalyticsChartView>
     with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    final controller =
-        TabController(length: 12, vsync: this, initialIndex: widget.month - 1);
+    final controller = TabController(length: 3, vsync: this);
     return Scaffold(
       appBar: AppBar(
         title: Text("Analytics"),
         bottom: TabBar(
           onTap: (position) {
             print("tapped on $position");
-            context
-                .read<AnalyticsPieBloc>()
-                .add(AnalyticsPieEventMonthChanged(month: position + 1));
+            AnalyticsPieEvent event;
+            switch (position) {
+              case 0:
+                event = AnalyticsEventDay();
+                break;
+              case 1:
+                event = AnalyticsEventWeek();
+                break;
+              default:
+                event = AnalyticsEventMonth();
+            }
+            context.read<AnalyticsPieBloc>().add(event);
           },
           isScrollable: true,
           tabs: [
             Tab(
-              text: "January",
+              text: "Day",
             ),
             Tab(
-              text: "February",
+              text: "Week",
             ),
             Tab(
-              text: "March",
-            ),
-            Tab(
-              text: "April",
-            ),
-            Tab(
-              text: "May",
-            ),
-            Tab(
-              text: "June",
-            ),
-            Tab(
-              text: "July",
-            ),
-            Tab(
-              text: "August",
-            ),
-            Tab(
-              text: "September",
-            ),
-            Tab(
-              text: "October",
-            ),
-            Tab(
-              text: "November",
-            ),
-            Tab(
-              text: "December",
+              text: "Month",
             ),
           ],
           controller: controller,
@@ -82,36 +66,115 @@ class _AnalyticsChartViewState extends State<AnalyticsChartView>
 }
 
 class AppChart extends StatelessWidget {
+  final initPage = 99;
+  final PageController _pageController = PageController(initialPage: 99);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        DateView(),
+        Container(
+          height: 200,
+          margin: EdgeInsets.all(10),
+          child: PageView.builder(
+            controller: _pageController,
+            itemCount: 100,
+            onPageChanged: (index) {
+              print("pageview => index ${initPage - index}");
+              final int position = initPage - index;
+              final currentDateTime =
+                  DateTime.now().add(Duration(days: -position));
+              BlocProvider.of<AnalyticsPieBloc>(context)
+                  .add(AnalyticsPieEventLoad(currentTime: currentDateTime));
+            },
+            itemBuilder: (context, index) {
+              final int position = initPage - index;
+              final currentDateTime =
+                  DateTime.now().add(Duration(days: -position));
+              return BlocProvider<DailyBarChartBloc>(
+                create: (_) =>
+                    DailyBarChartBloc(expenseRepository: ExpenseRepository())
+                      ..add(DailyBarChartEventLoad(dateTime: currentDateTime)),
+                child: DailyBarChart(),
+              );
+            },
+          ),
+        ),
+        ListScreen()
+      ],
+    );
+  }
+}
+
+class ListScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AnalyticsPieBloc, AnalyticsPieState>(
+        builder: (context, state) {
+      // if (state is AnalyticsStateChanged) {
+      //   return Container(
+      //     child: Expanded(
+      //       child: ListView.builder(
+      //         itemBuilder: (context, index) {
+      //           final categoryId = state.entities[index].category;
+      //           final category = ChooseCategory.CATEGORY_LIST[categoryId];
+      //           return ListRowDaily(
+      //             expenseCategory: category,
+      //             entity: state.entities[index],
+      //           );
+      //         },
+      //         itemCount: state.entities.length,
+      //       ),
+      //     ),
+      //   );
+      // }
+      if (state is AnalyticsStateLoaded) {
+        return Container(
+          child: Expanded(
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                final categoryId = state.entities[index].category;
+                final category = ChooseCategory.CATEGORY_LIST[categoryId];
+                return ListRowDaily(
+                  expenseCategory: category,
+                  entity: state.entities[index],
+                );
+              },
+              itemCount: state.entities.length,
+            ),
+          ),
+        );
+      } else
+        return CircularProgressIndicator();
+    });
+  }
+}
+
+class DateView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AnalyticsPieBloc, AnalyticsPieState>(
         builder: (context, state) {
       if (state is AnalyticsStateLoaded) {
-        return Column(
-          children: [
-            Container(
-              height: 350,
-              margin: EdgeInsets.all(10),
-              child: charts.PieChart(state.chartData,
-                  animate: false,
-                  defaultRenderer: new charts.ArcRendererConfig(
-                      arcWidth: 100,
-                      arcRendererDecorators: [new charts.ArcLabelDecorator()])),
+        String text;
+        if (state.type == AnalyticsType.WEEK){
+          text = Utility.getInstance()
+              .getTime("dd,MMMM ", state.startTime.millisecondsSinceEpoch);
+          text += Utility.getInstance()
+              .getTime("dd,MMMM", state.currentTime.millisecondsSinceEpoch);
+        }else{
+          text = Utility.getInstance()
+              .getTime("EEEE dd,MMMM", state.currentTime.millisecondsSinceEpoch);
+        }
+          return Container(
+          margin: EdgeInsets.only(top: 20.0),
+          child: Center(
+            child: Text(
+              text,
+              style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
             ),
-            Expanded(
-              child: ListView.builder(
-                itemBuilder: (context, index) {
-                  final categoryId = state.entities[index].category;
-                  final category = ChooseCategory.CATEGORY_LIST[categoryId];
-                  return ListRow(
-                    expenseCategory: category,
-                    entity: state.entities[index],
-                  );
-                },
-                itemCount: state.entities.length,
-              ),
-            )
-          ],
+          ),
         );
       }
       return CircularProgressIndicator();
@@ -119,11 +182,86 @@ class AppChart extends StatelessWidget {
   }
 }
 
-class ListRow extends StatelessWidget {
+class ListRowDaily extends StatelessWidget {
   final AnalyticsEntity entity;
   final ExpenseCategory expenseCategory;
 
-  ListRow({this.entity, this.expenseCategory});
+  ListRowDaily({this.entity, this.expenseCategory});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        children: [
+          Container(
+            margin: EdgeInsets.all(10.0),
+            child: Circle(expenseCategory.imageResource),
+          ),
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.only(left: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    child: Text(
+                      entity.name,
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      expenseCategory.name,
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.centerRight,
+            margin: EdgeInsets.only(left: 10),
+            padding: EdgeInsets.only(right: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Container(
+                  child: Text(
+                    entity.visibleAmount,
+                    style: TextStyle(
+                        // color: entity.type == ExpenseEntity.TYPE_DEBIT
+                        //     ? Colors.red
+                        //     : Colors.green,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    entity.visibleTimeHome,
+                    style: TextStyle(fontSize: 13),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ListRowGroup extends StatelessWidget {
+  final AnalyticsEntity entity;
+  final ExpenseCategory expenseCategory;
+
+  ListRowGroup({this.entity, this.expenseCategory});
 
   @override
   Widget build(BuildContext context) {

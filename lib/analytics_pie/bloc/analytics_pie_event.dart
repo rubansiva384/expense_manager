@@ -4,13 +4,20 @@ part of 'analytics_pie_bloc.dart';
 abstract class AnalyticsPieEvent {}
 
 class AnalyticsPieEventLoad extends AnalyticsPieEvent{
-  final int month;
+  final DateTime currentTime;
 
-  AnalyticsPieEventLoad({this.month});
+  AnalyticsPieEventLoad({this.currentTime});
 }
 
-class AnalyticsPieEventMonthChanged extends AnalyticsPieEvent{
-  final int month;
+class AnalyticsEventWeek extends AnalyticsPieEvent{
 
-  AnalyticsPieEventMonthChanged({this.month});
 }
+
+class AnalyticsEventDay extends AnalyticsPieEvent{
+
+}
+
+class AnalyticsEventMonth extends AnalyticsPieEvent{
+
+}
+

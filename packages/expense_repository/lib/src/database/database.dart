@@ -77,7 +77,22 @@ class MyDatabase{
 
   Future<List<AnalyticsEntity>> getAnalytics(int month) async{
     final Database db = await _getDatabaseInstance();
-    List<Map<String, dynamic>> list = await db.rawQuery("select sum($COLUMN_EXPENSE_AMOUNT) as  $COLUMN_ANALYTICS_TOTAL, $COLUMN_EXPENSE_CATEGORY , count(*) as $COLUMN_EXPENSE_COUNT  from $TABLE_EXPENSE where cast(strftime('%m' , $COLUMN_TIME ,'unixepoch') as int) = $month group by $COLUMN_EXPENSE_CATEGORY  ");
+    List<Map<String, dynamic>> list = await db.rawQuery("select sum($COLUMN_EXPENSE_AMOUNT) as  $COLUMN_ANALYTICS_TOTAL, $COLUMN_EXPENSE_CATEGORY , count(*) as $COLUMN_EXPENSE_COUNT , $COLUMN_TIME from $TABLE_EXPENSE where cast(strftime('%m' , $COLUMN_TIME ,'unixepoch') as int) = $month group by $COLUMN_EXPENSE_CATEGORY  ");
+    List<AnalyticsEntity> products = List<AnalyticsEntity>();
+    list.forEach((element) {
+      products.add(AnalyticsEntity.fromJson(element));
+      // print(element);
+    });
+    return products;
+  }
+
+  Future<List<AnalyticsEntity>> getAnalyticsByDate(DateTime dateTime) async{
+    final Database db = await _getDatabaseInstance();
+    //TODO check month also that could conflict
+    //TODO check actual datas coming : never grouped with type(credit , debit)
+    final String query = "select $COLUMN_TIME , cast(strftime('%H' , $COLUMN_TIME ,'unixepoch') as int) as HOUR_OF_MONTH , $COLUMN_EXPENSE_AMOUNT as $COLUMN_ANALYTICS_TOTAL , $COLUMN_EXPENSE_CATEGORY , $COLUMN_EXPENSE_DESCRIPTION from $TABLE_EXPENSE where cast(strftime('%d' , $COLUMN_TIME ,'unixepoch') as int) = ${dateTime.day} GROUP BY HOUR_OF_MONTH";
+    List<Map<String, dynamic>> list = await db.rawQuery(query);
+    // print(query);
     List<AnalyticsEntity> products = List<AnalyticsEntity>();
     list.forEach((element) {
       products.add(AnalyticsEntity.fromJson(element));
@@ -91,6 +106,20 @@ Future<List<Map<String, dynamic>>> getIncome(int month) async{
     final Database db = await _getDatabaseInstance();
     List<Map<String, dynamic>> list = await db.rawQuery("select sum($COLUMN_EXPENSE_AMOUNT) as $COLUMN_ANALYTICS_TOTAL , $COLUMN_EXPENSE_TYPE  from $TABLE_EXPENSE where cast(strftime('%m' , $COLUMN_TIME ,'unixepoch') as int) = $month group by $COLUMN_EXPENSE_TYPE  ");
     return list;
+  }
+
+  getAnalyticsByWeek(DateTime startTime , DateTime endTime) async{
+    final Database db = await _getDatabaseInstance();
+    //TODO check month also that could conflict
+    final String query = "select cast(strftime('%d' , $COLUMN_TIME ,'unixepoch') as int) as HOUR_OF_MONTH , $COLUMN_EXPENSE_AMOUNT as $COLUMN_ANALYTICS_TOTAL , $COLUMN_EXPENSE_CATEGORY , $COLUMN_EXPENSE_DESCRIPTION from $TABLE_EXPENSE where $COLUMN_TIME >= $startTime and $COLUMN_TIME <= $endTime GROUP BY HOUR_OF_MONTH";
+    List<Map<String, dynamic>> list = await db.rawQuery(query);
+    // print(query);
+    List<AnalyticsEntity> products = List<AnalyticsEntity>();
+    list.forEach((element) {
+      products.add(AnalyticsEntity.fromJson(element));
+      // print(element);
+    });
+    return products;
   }
 
 }

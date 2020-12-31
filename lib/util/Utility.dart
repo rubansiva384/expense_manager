@@ -1,13 +1,13 @@
 import 'package:intl/intl.dart';
 
 class Utility{
-  static Utility instance;
+  static Utility _instance;
 
   static Utility getInstance(){
-    if(instance == null){
-      instance = Utility._();
+    if(_instance == null){
+      _instance = Utility._();
     }
-    return instance;
+    return _instance;
   }
 
   Utility._();
