@@ -15,8 +15,4 @@ void main() {
     final month = DateFormat("MM").format(date);
     expect( month , '11');
   });
-
-  testWidgets('Databae Insert Test', (WidgetTester tester) async {
-
-  });
 }

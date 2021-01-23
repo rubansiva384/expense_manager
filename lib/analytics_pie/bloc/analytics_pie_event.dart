@@ -4,9 +4,10 @@ part of 'analytics_pie_bloc.dart';
 abstract class AnalyticsPieEvent {}
 
 class AnalyticsPieEventLoad extends AnalyticsPieEvent{
-  final DateTime currentTime;
+  final DateTime startTime;
+  final DateTime endTime;
 
-  AnalyticsPieEventLoad({this.currentTime});
+  AnalyticsPieEventLoad({this.startTime , this.endTime});
 }
 
 class AnalyticsEventWeek extends AnalyticsPieEvent{

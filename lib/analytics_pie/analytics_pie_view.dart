@@ -1,10 +1,8 @@
 import 'package:expense_manager/analytics_pie/bloc/analytics_pie_bloc.dart';
-import 'package:expense_manager/analytics_pie/widget/daily_analysis_cumulative.dart';
 import 'package:expense_manager/charts/daily/bloc/daily_bar_chart_bloc.dart';
 import 'package:expense_manager/charts/daily/daily_bar_chart.dart';
 import 'package:expense_manager/choose_category/choose_category.dart';
 import 'package:expense_manager/choose_category/model/ExpenseCategory.dart';
-import 'package:expense_manager/util/Utility.dart';
 import 'package:expense_manager/widgets/AppImage.dart';
 import 'package:expense_repository/expense_repository.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,9 +11,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // TODO make the list legend info
 class AnalyticsChartView extends StatefulWidget {
-  final DateTime time;
+  final DateTime startTime;
+  final DateTime endTime;
+  AnalyticsType analyticsType = AnalyticsType.DAY;
 
-  AnalyticsChartView({this.time});
+  AnalyticsChartView({this.startTime, this.endTime});
 
   @override
   _AnalyticsChartViewState createState() => _AnalyticsChartViewState();
@@ -35,12 +35,15 @@ class _AnalyticsChartViewState extends State<AnalyticsChartView>
             AnalyticsPieEvent event;
             switch (position) {
               case 0:
+                widget.analyticsType = AnalyticsType.DAY;
                 event = AnalyticsEventDay();
                 break;
               case 1:
+                widget.analyticsType = AnalyticsType.WEEK;
                 event = AnalyticsEventWeek();
                 break;
               default:
+                widget.analyticsType = AnalyticsType.MONTH;
                 event = AnalyticsEventMonth();
             }
             context.read<AnalyticsPieBloc>().add(event);
@@ -60,7 +63,10 @@ class _AnalyticsChartViewState extends State<AnalyticsChartView>
           controller: controller,
         ),
       ),
-      body: AppChart(),
+      body: BlocProvider<AnalyticsPieBloc>(
+        create: (_) =>  AnalyticsPieBloc(startTime: DateTime.now(), endTime: DateTime.now() , repository: ExpenseRepository()),
+        child: AppChart(),
+      )
     );
   }
 }
@@ -69,41 +75,65 @@ class AppChart extends StatelessWidget {
   final initPage = 99;
   final PageController _pageController = PageController(initialPage: 99);
 
+  AppChart();
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        DateView(),
-        Container(
-          height: 200,
-          margin: EdgeInsets.all(10),
-          child: PageView.builder(
-            controller: _pageController,
-            itemCount: 100,
-            onPageChanged: (index) {
-              print("pageview => index ${initPage - index}");
-              final int position = initPage - index;
-              final currentDateTime =
-                  DateTime.now().add(Duration(days: -position));
-              BlocProvider.of<AnalyticsPieBloc>(context)
-                  .add(AnalyticsPieEventLoad(currentTime: currentDateTime));
-            },
-            itemBuilder: (context, index) {
-              final int position = initPage - index;
-              final currentDateTime =
-                  DateTime.now().add(Duration(days: -position));
-              return BlocProvider<DailyBarChartBloc>(
-                create: (_) =>
-                    DailyBarChartBloc(expenseRepository: ExpenseRepository())
-                      ..add(DailyBarChartEventLoad(dateTime: currentDateTime)),
-                child: DailyBarChart(),
-              );
-            },
+    return BlocBuilder<AnalyticsPieBloc , AnalyticsPieState>(builder: (context, state) {
+      return Column(
+        children: [
+          Container(
+            height: 300,
+            margin: EdgeInsets.all(10),
+            child: PageView.builder(
+              controller: _pageController,
+              itemCount: 100,
+              onPageChanged: (index) {
+                print("pageview => index ${initPage - index}");
+                final int position = initPage - index;
+                final currentDateTime =
+                DateTime.now().add(Duration(days: -position));
+                BlocProvider.of<AnalyticsPieBloc>(context)
+                    .add(AnalyticsPieEventLoad(
+                  startTime: currentDateTime,
+                  endTime: currentDateTime,
+                ));
+              },
+              itemBuilder: (context, index) {
+                int factor = 1;
+                if (state.type == AnalyticsType.WEEK) {
+                  factor = 7;
+                } else if (state.type ==
+                    AnalyticsType.MONTH) {
+                  factor = 30;
+                }
+                final int position = (initPage - index) * factor;
+                DateTime startTime;
+                DateTime endTime;
+                startTime =
+                    state.startTime.add(Duration(days: -position));
+                endTime =
+                    state.endTime.add(Duration(days: -position));
+                // analyticsChartView.startTime = startTime;
+                // analyticsChartView.endTime = endTime;
+                print("starttime => $startTime");
+                print("endtime => $endTime");
+                return BlocProvider<DailyBarChartBloc>(
+                  create: (_) =>
+                  DailyBarChartBloc(
+                      expenseRepository: ExpenseRepository(),
+                      analyticsPieBloc: context.read<AnalyticsPieBloc>())
+                    ..add(DailyBarChartEventLoad(
+                        startTime: startTime, endTime: endTime)),
+                  child: DailyBarChart(),
+                );
+              },
+            ),
           ),
-        ),
-        ListScreen()
-      ],
-    );
+          ListScreen()
+        ],
+      );
+    });
   }
 }
 
@@ -112,24 +142,7 @@ class ListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AnalyticsPieBloc, AnalyticsPieState>(
         builder: (context, state) {
-      // if (state is AnalyticsStateChanged) {
-      //   return Container(
-      //     child: Expanded(
-      //       child: ListView.builder(
-      //         itemBuilder: (context, index) {
-      //           final categoryId = state.entities[index].category;
-      //           final category = ChooseCategory.CATEGORY_LIST[categoryId];
-      //           return ListRowDaily(
-      //             expenseCategory: category,
-      //             entity: state.entities[index],
-      //           );
-      //         },
-      //         itemCount: state.entities.length,
-      //       ),
-      //     ),
-      //   );
-      // }
-      if (state is AnalyticsStateLoaded) {
+      if (state.entities != null) {
         return Container(
           child: Expanded(
             child: ListView.builder(
@@ -147,37 +160,6 @@ class ListScreen extends StatelessWidget {
         );
       } else
         return CircularProgressIndicator();
-    });
-  }
-}
-
-class DateView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<AnalyticsPieBloc, AnalyticsPieState>(
-        builder: (context, state) {
-      if (state is AnalyticsStateLoaded) {
-        String text;
-        if (state.type == AnalyticsType.WEEK){
-          text = Utility.getInstance()
-              .getTime("dd,MMMM ", state.startTime.millisecondsSinceEpoch);
-          text += Utility.getInstance()
-              .getTime("dd,MMMM", state.currentTime.millisecondsSinceEpoch);
-        }else{
-          text = Utility.getInstance()
-              .getTime("EEEE dd,MMMM", state.currentTime.millisecondsSinceEpoch);
-        }
-          return Container(
-          margin: EdgeInsets.only(top: 20.0),
-          child: Center(
-            child: Text(
-              text,
-              style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
-            ),
-          ),
-        );
-      }
-      return CircularProgressIndicator();
     });
   }
 }

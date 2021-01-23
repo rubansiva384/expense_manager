@@ -1,17 +1,21 @@
 part of 'daily_bar_chart_bloc.dart';
 
 @immutable
-abstract class DailyBarChartEvent {}
+class DailyBarChartEvent {
+DailyBarChartEvent();
+}
 
 class DailyBarChartEventLoad extends DailyBarChartEvent{
-    final DateTime dateTime;
-
-    DailyBarChartEventLoad({this.dateTime});
-}
-
-class DailyBarChartEventLoadWeek extends DailyBarChartEvent{
     final DateTime startTime;
     final DateTime endTime;
-
-    DailyBarChartEventLoadWeek(this.startTime , this.endTime);
+    DailyBarChartEventLoad({this.startTime , this.endTime});
 }
+
+// //TODO remove the type here; if the method name Week you already have the type
+// class DailyBarChartEventLoadWeek extends DailyBarChartEvent{
+//     final DateTime startTime;
+//     final DateTime endTime;
+//     final AnalyticsType type;
+//
+//     DailyBarChartEventLoadWeek({this.startTime , this.endTime , this.type}) : super(type: type);
+// }

@@ -1,15 +1,6 @@
 
 part of 'analytics_pie_bloc.dart';
 
-@immutable
-abstract class AnalyticsPieState {
-
-}
-
-class AnalyticsPieInitial extends AnalyticsPieState {
-
-}
-
 // class AnalyticsStateChanged extends AnalyticsPieState{
 //   final List<AnalyticsEntity> entities;
 //   final DateTime currentTime;
@@ -73,19 +64,20 @@ enum AnalyticsType{
   DAY , WEEK, MONTH
 }
 
-class AnalyticsStateLoaded extends AnalyticsPieState{
+class AnalyticsPieState{
   final List<AnalyticsEntity> entities;
-  final DateTime currentTime;
+  final DateTime endTime;
   final AnalyticsType type;
   final DateTime startTime;
 
-  AnalyticsStateLoaded({this.entities , this.currentTime , this.type , this.startTime});
+  AnalyticsPieState({this.entities , this.endTime , this.type , this.startTime});
 
-  AnalyticsStateLoaded copyWith({List<ExpenseEntity> entities , int currentMonthPosition , AnalyticsType analyticsType}){
-    return AnalyticsStateLoaded(
+  AnalyticsPieState copyWith({List<ExpenseEntity> entities , int currentMonthPosition , AnalyticsType analyticsType , DateTime startTime}){
+    return AnalyticsPieState(
       entities: entities ?? this.entities,
-        currentTime: currentMonthPosition ?? this.currentTime,
-      type: analyticsType ?? type
+        endTime: currentMonthPosition ?? this.endTime,
+      type: analyticsType ?? type,
+      startTime: startTime ?? this.startTime
     );
   }
 

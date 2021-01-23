@@ -13,8 +13,10 @@ part 'analytics_pie_state.dart';
 
 class AnalyticsPieBloc extends Bloc<AnalyticsPieEvent, AnalyticsPieState> {
   final ExpenseRepository repository;
+  final DateTime startTime ;
+  final DateTime endTime;
 
-  AnalyticsPieBloc({this.repository}) : super(AnalyticsPieInitial());
+  AnalyticsPieBloc({this.repository , this.startTime , this.endTime}) : super(AnalyticsPieState(startTime: startTime , endTime:  endTime));
 
   @override
   Stream<AnalyticsPieState> mapEventToState(
@@ -23,8 +25,8 @@ class AnalyticsPieBloc extends Bloc<AnalyticsPieEvent, AnalyticsPieState> {
     assert(repository != null);
 
     if(event is AnalyticsPieEventLoad){
-      final List<AnalyticsEntity> data  = await repository.getAnalyticsByDate(event.currentTime);
-      yield AnalyticsStateLoaded(entities: data , currentTime: event.currentTime);
+      final List<AnalyticsEntity> data  = await repository.getAnalyticsByDate(event.startTime);
+      yield AnalyticsPieState(entities: data , endTime: event.startTime , type: AnalyticsType.DAY);
     }
 
     if(event is AnalyticsEventDay){
@@ -33,7 +35,7 @@ class AnalyticsPieBloc extends Bloc<AnalyticsPieEvent, AnalyticsPieState> {
 
     if(event is AnalyticsEventWeek){
       final List<AnalyticsEntity> data  = await repository.getAnalyticsByWeek(DateTime.now() , DateTime.now().add(Duration(days: -7)));
-      yield AnalyticsStateLoaded(entities: data , currentTime: DateTime.now() , startTime: DateTime.now().add(Duration(days: -7)));
+      yield AnalyticsPieState(entities: data , endTime: DateTime.now() , startTime: DateTime.now().add(Duration(days: -7)) , type: AnalyticsType.WEEK);
     }
 
   }

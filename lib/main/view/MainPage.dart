@@ -1,5 +1,4 @@
 import 'package:expense_manager/add_expense/view/add_event_page.dart';
-import 'package:expense_manager/choose_category/model/ExpenseCategory.dart';
 import 'package:expense_repository/expense_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
