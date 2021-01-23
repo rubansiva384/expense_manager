@@ -23,4 +23,5 @@ class DailyBarChartBloc extends Bloc<DailyBarChartEvent, DailyBarChartState> {
       yield DailyBarChartStateLoaded(entities: data , currentTime: event.dateTime);
     }
   }
+
 }

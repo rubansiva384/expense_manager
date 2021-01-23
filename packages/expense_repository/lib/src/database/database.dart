@@ -92,11 +92,11 @@ class MyDatabase{
     //TODO check actual datas coming : never grouped with type(credit , debit)
     final String query = "select $COLUMN_TIME , cast(strftime('%H' , $COLUMN_TIME ,'unixepoch') as int) as HOUR_OF_MONTH , $COLUMN_EXPENSE_AMOUNT as $COLUMN_ANALYTICS_TOTAL , $COLUMN_EXPENSE_CATEGORY , $COLUMN_EXPENSE_DESCRIPTION from $TABLE_EXPENSE where cast(strftime('%d' , $COLUMN_TIME ,'unixepoch') as int) = ${dateTime.day} GROUP BY HOUR_OF_MONTH";
     List<Map<String, dynamic>> list = await db.rawQuery(query);
-    // print(query);
+    print(query);
     List<AnalyticsEntity> products = List<AnalyticsEntity>();
     list.forEach((element) {
       products.add(AnalyticsEntity.fromJson(element));
-      // print(element);
+      print(element);
     });
     return products;
   }
