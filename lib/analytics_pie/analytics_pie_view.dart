@@ -71,38 +71,42 @@ class AppChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        DateView(),
-        Container(
-          height: 200,
-          margin: EdgeInsets.all(10),
-          child: PageView.builder(
-            controller: _pageController,
-            itemCount: 100,
-            onPageChanged: (index) {
-              print("pageview => index ${initPage - index}");
-              final int position = initPage - index;
-              final currentDateTime =
+    return BlocBuilder<AnalyticsPieBloc, AnalyticsPieState>(
+      builder: (context , state){
+        return Column(
+          children: [
+            DateView(),
+            Container(
+              height: 200,
+              margin: EdgeInsets.all(10),
+              child: PageView.builder(
+                controller: _pageController,
+                itemCount: 100,
+                onPageChanged: (index) {
+                  print("pageview => index ${initPage - index}");
+                  final int position = initPage - index;
+                  final currentDateTime =
                   DateTime.now().add(Duration(days: -position));
-              BlocProvider.of<AnalyticsPieBloc>(context)
-                  .add(AnalyticsPieEventLoad(currentTime: currentDateTime));
-            },
-            itemBuilder: (context, index) {
-              final int position = initPage - index;
-              final currentDateTime =
+                  BlocProvider.of<AnalyticsPieBloc>(context)
+                      .add(AnalyticsPieEventLoad(currentTime: currentDateTime));
+                },
+                itemBuilder: (context, index) {
+                  final int position = initPage - index;
+                  final currentDateTime =
                   DateTime.now().add(Duration(days: -position));
-              return BlocProvider<DailyBarChartBloc>(
-                create: (_) =>
+                  return BlocProvider<DailyBarChartBloc>(
+                    create: (_) =>
                     DailyBarChartBloc(expenseRepository: ExpenseRepository())
                       ..add(DailyBarChartEventLoad(dateTime: currentDateTime)),
-                child: DailyBarChart(),
-              );
-            },
-          ),
-        ),
-        ListScreen()
-      ],
+                    child: DailyBarChart(),
+                  );
+                },
+              ),
+            ),
+            ListScreen()
+          ],
+        );
+      },
     );
   }
 }
