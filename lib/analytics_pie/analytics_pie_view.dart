@@ -79,6 +79,7 @@ class AppChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     return BlocBuilder<AnalyticsPieBloc , AnalyticsPieState>(builder: (context, state) {
       return Column(
         children: [

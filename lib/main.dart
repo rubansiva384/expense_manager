@@ -1,3 +1,5 @@
+import 'package:expense_manager/chart_try/chart_page.dart';
+import 'package:expense_manager/chart_try/chart_try_bloc.dart';
 import 'package:expense_manager/main/bloc/main_bloc.dart';
 import 'package:expense_manager/main/view/MainPage.dart';
 import 'package:expense_repository/expense_repository.dart';
@@ -13,13 +15,18 @@ void main() {
       //MainPage(ExpenseRepository())
 //    ScrollApp()
       MaterialApp(
-    home: RepositoryProvider.value(
-      value: repo,
-      child: BlocProvider(
-        create: (_) => MainBloc(repo)..add(MainEventLoad(time: thisMonth)),
-        child: MainPage(),
-      ),
-    ),
+    home:
+    // BlocProvider(
+    //   create: (_) => ChartTryBloc(),
+    //   child: ChartPage(),
+    // )
+   RepositoryProvider.value(
+     value: repo,
+     child: BlocProvider(
+       create: (_) => MainBloc(repo)..add(MainEventLoad(time: thisMonth)),
+       child: MainPage(),
+     ),
+   ),
   ));
 }
 
