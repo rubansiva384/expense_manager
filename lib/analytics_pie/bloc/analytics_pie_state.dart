@@ -69,15 +69,17 @@ class AnalyticsPieState{
   final DateTime endTime;
   final AnalyticsType type;
   final DateTime startTime;
+  final List<AnalyticsEntity> barDataList;
 
-  AnalyticsPieState({this.entities , this.endTime , this.type , this.startTime});
+  AnalyticsPieState({this.entities , this.endTime , this.type , this.startTime , this.barDataList});
 
-  AnalyticsPieState copyWith({List<ExpenseEntity> entities , int currentMonthPosition , AnalyticsType analyticsType , DateTime startTime}){
+  AnalyticsPieState copyWith({List<AnalyticsEntity> entities, List<AnalyticsEntity> barDataList  , int currentMonthPosition , AnalyticsType analyticsType , DateTime startTime , DateTime endTime ,AnalyticsType type}){
     return AnalyticsPieState(
       entities: entities ?? this.entities,
-        endTime: currentMonthPosition ?? this.endTime,
-      type: analyticsType ?? type,
-      startTime: startTime ?? this.startTime
+        endTime: endTime ?? this.endTime,
+      type: type ?? analyticsType,
+      startTime: startTime ?? this.startTime,
+      barDataList: barDataList ?? this.barDataList
     );
   }
 

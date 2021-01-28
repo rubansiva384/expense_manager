@@ -47,7 +47,7 @@ class DailyBarChartBloc extends Bloc<DailyBarChartEvent, DailyBarChartState> {
 
   @override
   Future<void> close() {
-    streamSubscription.cancel();
+    streamSubscription?.cancel();
     return super.close();
   }
 

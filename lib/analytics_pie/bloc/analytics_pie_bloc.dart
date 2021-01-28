@@ -16,7 +16,7 @@ class AnalyticsPieBloc extends Bloc<AnalyticsPieEvent, AnalyticsPieState> {
   final DateTime startTime ;
   final DateTime endTime;
 
-  AnalyticsPieBloc({this.repository , this.startTime , this.endTime}) : super(AnalyticsPieState(startTime: startTime , endTime:  endTime));
+  AnalyticsPieBloc({this.repository , this.startTime , this.endTime}) : super(AnalyticsPieState(startTime: startTime , endTime:  endTime , type: AnalyticsType.DAY));
 
   @override
   Stream<AnalyticsPieState> mapEventToState(
@@ -26,7 +26,8 @@ class AnalyticsPieBloc extends Bloc<AnalyticsPieEvent, AnalyticsPieState> {
 
     if(event is AnalyticsPieEventLoad){
       final List<AnalyticsEntity> data  = await repository.getAnalyticsByDate(event.startTime);
-      yield AnalyticsPieState(entities: data , endTime: event.startTime , type: AnalyticsType.DAY);
+      final List<AnalyticsEntity> chartData  = await repository.getAnalyticsByDate(event.startTime);
+      yield state.copyWith(entities: data , endTime: event.startTime, startTime: event.startTime , type: AnalyticsType.DAY);
     }
 
     if(event is AnalyticsEventDay){
@@ -35,7 +36,7 @@ class AnalyticsPieBloc extends Bloc<AnalyticsPieEvent, AnalyticsPieState> {
 
     if(event is AnalyticsEventWeek){
       final List<AnalyticsEntity> data  = await repository.getAnalyticsByWeek(DateTime.now() , DateTime.now().add(Duration(days: -7)));
-      yield AnalyticsPieState(entities: data , endTime: DateTime.now() , startTime: DateTime.now().add(Duration(days: -7)) , type: AnalyticsType.WEEK);
+      yield state.copyWith(entities: data , endTime: DateTime.now() , startTime: DateTime.now().add(Duration(days: -7)) , type: AnalyticsType.WEEK);
     }
 
   }
