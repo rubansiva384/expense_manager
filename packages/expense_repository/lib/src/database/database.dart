@@ -113,12 +113,7 @@ Future<List<Map<String, dynamic>>> getIncome(int month) async{
   getAnalyticsByWeek(DateTime startTime , DateTime endTime) async{
     final Database db = await _getDatabaseInstance();
     //TODO check month also that could conflict
-<<<<<<< HEAD
-    final formatter = DateFormat("yyyy-MM-dd");
-    final String query = "select cast(strftime('%d' , $COLUMN_TIME ,'unixepoch') as int) as HOUR_OF_MONTH , $COLUMN_TIME , $COLUMN_EXPENSE_AMOUNT as $COLUMN_ANALYTICS_TOTAL , $COLUMN_EXPENSE_CATEGORY , $COLUMN_EXPENSE_DESCRIPTION from $TABLE_EXPENSE where datetime($COLUMN_TIME , 'unixepoch') BETWEEN '${formatter.format(startTime)}' and '${formatter.format(endTime.add(Duration(days: 1)))}' GROUP BY HOUR_OF_MONTH";
-=======
     final String query = "select cast(strftime('%d' , $COLUMN_TIME ,'unixepoch') as int) as HOUR_OF_MONTH , $COLUMN_EXPENSE_AMOUNT as $COLUMN_ANALYTICS_TOTAL , $COLUMN_EXPENSE_CATEGORY , $COLUMN_EXPENSE_DESCRIPTION from $TABLE_EXPENSE where cast(strftime('%d' , $COLUMN_TIME ,'unixepoch') as int) >= ${startTime.day} and cast(strftime('%d' , $COLUMN_TIME ,'unixepoch') as int) <= ${endTime.day} GROUP BY HOUR_OF_MONTH";
->>>>>>> ce65d219e368600686d87293495fb1f458203717
     List<Map<String, dynamic>> list = await db.rawQuery(query);
     print(query);
     List<AnalyticsEntity> products = List<AnalyticsEntity>();

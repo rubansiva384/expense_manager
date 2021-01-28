@@ -79,7 +79,6 @@ class AppChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
     return BlocBuilder<AnalyticsPieBloc , AnalyticsPieState>(builder: (context, state) {
       return Column(
         children: [
@@ -120,6 +119,7 @@ class AppChart extends StatelessWidget {
                 print("starttime => $startTime");
                 print("endtime => $endTime");
                 return BlocProvider<DailyBarChartBloc>(
+                  lazy: false,
                   create: (_) =>
                   DailyBarChartBloc(
                       expenseRepository: ExpenseRepository(),
