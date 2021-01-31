@@ -16,17 +16,17 @@ void main() {
 //    ScrollApp()
       MaterialApp(
     home:
-    // BlocProvider(
-    //   create: (_) => ChartTryBloc(),
-    //   child: ChartPage(),
-    // )
-   RepositoryProvider.value(
-     value: repo,
-     child: BlocProvider(
-       create: (_) => MainBloc(repo)..add(MainEventLoad(time: thisMonth)),
-       child: MainPage(),
-     ),
-   ),
+    BlocProvider(
+      create: (_) => ChartTryBloc(),
+      child: ChartPage(),
+    )
+   // RepositoryProvider.value(
+   //   value: repo,
+   //   child: BlocProvider(
+   //     create: (_) => MainBloc(repo)..add(MainEventLoad(time: thisMonth)),
+   //     child: MainPage(),
+   //   ),
+   // ),
   ));
 }
 

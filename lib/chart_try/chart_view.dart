@@ -17,6 +17,9 @@ class ChartView extends StatelessWidget {
         width: 200,
         child: PageView.builder(
           controller: _pageController,
+          onPageChanged: (index){
+              // context.read<ChartTryBloc>().add(ChartTryEventWeek());
+          },
           itemBuilder: (context , index){
             return Container(
               margin: EdgeInsets.all(10.0),
@@ -26,7 +29,7 @@ class ChartView extends StatelessWidget {
               child: Center(
                 child:
                 // Text("${state.type}"),
-                BlocProvider(create: (_) => SimpleCompBloc()..add(SceLoad()), child: SingleChartView(),),
+                BlocProvider(lazy : false , create: (_) => SimpleCompBloc()..add(SceLoad(type: state.type)), child: SingleChartView(),),
               ),
             );
           },

@@ -17,11 +17,11 @@ class SimpleCompBloc extends Bloc<SimpleCompEvent, SimpleCompState> {
   ) async* {
     if(event is SceLoad){
       // sleep(Duration(seconds: 3));
+      yield SimpleCompState();
       await Future.delayed(Duration(seconds: 3));
       final list= List<String>();
-      list.add("shiva");
       list.add("raja");
-      yield SimpleCompState(list: list);
+      yield SimpleCompState(list: list , type : event.type );
     }
   }
 }

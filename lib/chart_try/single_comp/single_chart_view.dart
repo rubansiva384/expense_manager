@@ -7,14 +7,14 @@ class SingleChartView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SimpleCompBloc, SimpleCompState>(builder: (context , state){
-      if(state.list != null){
+      if(state.list == null){
         return Container(
           child: Text("Loading"),
         );
       }
       else if(state.list != null){
         return Container(
-          child: Text("${state.list.length}"),
+          child: Text("${state.type}${state.list.length}"),
         );
       }
       return CircularProgressIndicator();
