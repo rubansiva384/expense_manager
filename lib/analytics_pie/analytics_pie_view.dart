@@ -68,16 +68,32 @@ class _AnalyticsChartViewState extends State<AnalyticsChartView>
   }
 }
 
-class AppChart extends StatelessWidget {
-  final initPage = 99;
+class AppChart extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() {
+    return _AppChart();
+  }
+}
 
-  AppChart();
+class _AppChart extends State<AppChart> {
+  final initPage = 99;
+  final PageController _pageController = PageController(initialPage: 99);
+  DailyBarChartBloc _bloc;
+
+  _AppChart();
+
+  @override
+  void initState() {
+    _bloc = DailyBarChartBloc(expenseRepository: ExpenseRepository(),
+        analyticsPieBloc: context.read<AnalyticsPieBloc>());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AnalyticsPieBloc , AnalyticsPieState>(builder: (context, state) {
 
-    final PageController _pageController = PageController(initialPage: 99);
+
     return Column(
         children: [
           Container(
@@ -90,11 +106,11 @@ class AppChart extends StatelessWidget {
                 print("pageview => index ${initPage - index}");
                 final int position = initPage - index;
                 final currentDateTime = DateTime.now().add(Duration(days: -position));
-                // BlocProvider.of<AnalyticsPieBloc>(context)
-                //     .add(AnalyticsPieEventLoad(
-                //   startTime: currentDateTime,
-                //   endTime: currentDateTime,
-                // ));
+                BlocProvider.of<AnalyticsPieBloc>(context)
+                    .add(AnalyticsPieEventLoad(
+                  startTime: currentDateTime,
+                  endTime: currentDateTime,
+                ));
               },
               itemBuilder: (context, index) {
                 int factor = 1;
@@ -115,14 +131,9 @@ class AppChart extends StatelessWidget {
                 // analyticsChartView.endTime = endTime;
                 print("starttime => $startTime");
                 print("endtime => $endTime");
-                return BlocProvider<DailyBarChartBloc>(
-                  create: (_) =>
-                  DailyBarChartBloc(
-                    analyticsType: state.type,
-                      expenseRepository: ExpenseRepository(),
-                      analyticsPieBloc: context.read<AnalyticsPieBloc>())
-                    ..add(DailyBarChartEventLoad(
-                        startTime: startTime, endTime: endTime)),
+                return BlocProvider.value(
+                 value: _bloc..add(DailyBarChartEventLoad(
+                        startTime: endTime, endTime: startTime)),
                   child: DailyBarChart(),
                 );
               },

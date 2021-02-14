@@ -5,9 +5,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ChartView extends StatelessWidget {
+class ChartView extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() {
+    return _ChartView();
+  }
+}
+
+class _ChartView extends State<ChartView> {
   final initPage = 99;
   final PageController _pageController = PageController(initialPage: 99);
+  final SimpleCompBloc _simpleCompBloc = SimpleCompBloc();
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    _simpleCompBloc.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +41,9 @@ class ChartView extends StatelessWidget {
               child: Center(
                 child:
                 // Text("${state.type}"),
-                BlocProvider(create: (_) => SimpleCompBloc()..add(SceLoad()), child: SingleChartView(),),
+                BlocProvider.value(
+                  value: _simpleCompBloc..add(SceLoad(type: state.type)),
+                  child: SingleChartView(),),
               ),
             );
           },
@@ -35,4 +52,5 @@ class ChartView extends StatelessWidget {
       );
     });
   }
+
 }

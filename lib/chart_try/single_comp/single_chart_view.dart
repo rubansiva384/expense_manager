@@ -14,7 +14,7 @@ class SingleChartView extends StatelessWidget {
       }
       else if(state.list != null){
         return Container(
-          child: Text("${state.list.length}"),
+          child: Text("${state.type}${state.list.length}"),
         );
       }
       return CircularProgressIndicator();
