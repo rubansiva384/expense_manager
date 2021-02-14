@@ -92,8 +92,6 @@ class _AppChart extends State<AppChart> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AnalyticsPieBloc , AnalyticsPieState>(builder: (context, state) {
-
-
     return Column(
         children: [
           Container(
@@ -133,7 +131,7 @@ class _AppChart extends State<AppChart> {
                 print("endtime => $endTime");
                 return BlocProvider.value(
                  value: _bloc..add(DailyBarChartEventLoad(
-                        startTime: endTime, endTime: startTime)),
+                        startTime: endTime, endTime: startTime , analyticsType: state.type)),
                   child: DailyBarChart(),
                 );
               },
