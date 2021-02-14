@@ -32,6 +32,9 @@ class _ChartView extends State<ChartView> {
         width: 200,
         child: PageView.builder(
           controller: _pageController,
+          onPageChanged: (index){
+              // context.read<ChartTryBloc>().add(ChartTryEventWeek());
+          },
           itemBuilder: (context , index){
             return Container(
               margin: EdgeInsets.all(10.0),
