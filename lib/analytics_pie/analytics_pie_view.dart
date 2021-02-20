@@ -69,6 +69,7 @@ class _AnalyticsChartViewState extends State<AnalyticsChartView>
 }
 
 class AppChart extends StatefulWidget{
+
   @override
   State<StatefulWidget> createState() {
     return _AppChart();
@@ -76,6 +77,7 @@ class AppChart extends StatefulWidget{
 }
 
 class _AppChart extends State<AppChart> {
+  // If you change this value update it to the bloc too;
   final initPage = 99;
   final PageController _pageController = PageController(initialPage: 99);
   DailyBarChartBloc _bloc;
@@ -91,7 +93,7 @@ class _AppChart extends State<AppChart> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AnalyticsPieBloc , AnalyticsPieState>(builder: (context, state) {
+    final state = _bloc.analyticsPieBloc.state;
     return Column(
         children: [
           Container(
@@ -125,10 +127,9 @@ class _AppChart extends State<AppChart> {
                     state.startTime.add(Duration(days: -position));
                 endTime =
                     state.endTime.add(Duration(days: -position));
-                // analyticsChartView.startTime = startTime;
-                // analyticsChartView.endTime = endTime;
                 print("starttime => $startTime");
                 print("endtime => $endTime");
+                print("endtime => $index");
                 return BlocProvider.value(
                  value: _bloc..add(DailyBarChartEventLoad(
                         startTime: endTime, endTime: startTime , analyticsType: state.type)),
@@ -140,7 +141,6 @@ class _AppChart extends State<AppChart> {
           ListScreen()
         ],
       );
-    });
   }
 }
 

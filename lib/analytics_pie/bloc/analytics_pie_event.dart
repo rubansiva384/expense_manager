@@ -10,6 +10,11 @@ class AnalyticsPieEventLoad extends AnalyticsPieEvent{
   AnalyticsPieEventLoad({this.startTime , this.endTime});
 }
 
+class AnalyticsChartChanged extends AnalyticsPieEvent{
+  final int index;
+  AnalyticsChartChanged({this.index});
+}
+
 class AnalyticsEventWeek extends AnalyticsPieEvent{
 
 }

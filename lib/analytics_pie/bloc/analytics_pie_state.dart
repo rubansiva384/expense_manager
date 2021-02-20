@@ -64,7 +64,7 @@ enum AnalyticsType{
   DAY , WEEK, MONTH
 }
 
-class AnalyticsPieState{
+class AnalyticsPieState extends Equatable{
   final List<AnalyticsEntity> entities;
   final DateTime endTime;
   final AnalyticsType type;
@@ -126,5 +126,7 @@ class AnalyticsPieState{
     ];
   }
 
+  @override
+  List<Object> get props => [startTime , endTime , entities , type, barDataList];
 
 }
