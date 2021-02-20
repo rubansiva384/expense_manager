@@ -1,3 +1,5 @@
+import 'package:expense_manager/analytics/AnalyticsPage.dart';
+import 'package:expense_manager/analytics/bloc/analytics_bloc.dart';
 import 'package:expense_manager/analytics_pie/analytics_pie_page.dart';
 import 'package:expense_manager/choose_category/choose_category.dart';
 import 'package:expense_manager/choose_category/model/ExpenseCategory.dart';
@@ -210,10 +212,7 @@ class DashBoarHeader extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => AnalyticsPieChartPage(
-                                      expenseRepository: repo,
-                                      month: month,
-                                    )));
+                                builder: (context) => AnalyticsPage() ));
                       },
                       child: Image(
                         height: 25,

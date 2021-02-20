@@ -69,7 +69,6 @@ class _AnalyticsChartViewState extends State<AnalyticsChartView>
 }
 
 class AppChart extends StatelessWidget {
-  final initPage = 99;
 
   AppChart();
 
@@ -77,47 +76,12 @@ class AppChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AnalyticsPieBloc , AnalyticsPieState>(builder: (context, state) {
 
-    final PageController _pageController = PageController(initialPage: 99);
-    return Column(
+      return Column(
         children: [
           Container(
             height: 300,
             margin: EdgeInsets.all(10),
-            child: PageView.builder(
-              controller: _pageController,
-              itemCount: 100,
-              onPageChanged: (index) {
-                print("pageview => index ${initPage - index}");
-                final int position = initPage - index;
-                final currentDateTime = DateTime.now().add(Duration(days: -position));
-                // BlocProvider.of<AnalyticsPieBloc>(context)
-                //     .add(AnalyticsPieEventLoad(
-                //   startTime: currentDateTime,
-                //   endTime: currentDateTime,
-                // ));
-              },
-              itemBuilder: (context, index) {
-                int factor = 1;
-                if (state.type == AnalyticsType.WEEK) {
-                  factor = 7;
-                } else if (state.type ==
-                    AnalyticsType.MONTH) {
-                  factor = 30;
-                }
-                final int position = (initPage - index) * factor;
-                DateTime startTime;
-                DateTime endTime;
-                startTime =
-                    state.startTime.add(Duration(days: -position));
-                endTime =
-                    state.endTime.add(Duration(days: -position));
-                // analyticsChartView.startTime = startTime;
-                // analyticsChartView.endTime = endTime;
-                print("starttime => $startTime");
-                print("endtime => $endTime");
-                return  DailyBarChart(chartData: state.barChartTimeLineData, startTime: state.startTime.millisecondsSinceEpoch , endTime: state.startTime.millisecondsSinceEpoch, analyticsType: state.type, );
-              },
-            ),
+            child: DailyBarChart(chartData: state.barChartTimeLineData, startTime: state.startTime.millisecondsSinceEpoch , endTime: state.startTime.millisecondsSinceEpoch, analyticsType: state.type, ),
           ),
           ListScreen()
         ],
