@@ -13,7 +13,7 @@ final _controller = StreamController<ExpenseRepositoryEvent>();
       return await MyDatabase.getInstance().getAllExpensesByMonth(month);
   }
 
-  Future<List<AnalyticsEntity>> getAnalytics(DateTime month) async{
+  Future<List<AnalyticsEntity>> getAnalyticsByMonth(DateTime month) async{
       return await MyDatabase.getInstance().getAnalytics(month.month);
   }
 

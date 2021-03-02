@@ -21,7 +21,7 @@ class SimpleCompBloc extends Bloc<SimpleCompEvent, SimpleCompState> {
       await Future.delayed(Duration(seconds: 3));
       final list= List<String>();
       list.add("raja");
-      yield SimpleCompState(list: list , type : event.type );
+      yield SimpleCompState(list: list , type: event.type);
     }
   }
 }

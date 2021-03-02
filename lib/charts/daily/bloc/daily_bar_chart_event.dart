@@ -8,7 +8,8 @@ DailyBarChartEvent();
 class DailyBarChartEventLoad extends DailyBarChartEvent{
     final DateTime startTime;
     final DateTime endTime;
-    DailyBarChartEventLoad({this.startTime , this.endTime});
+    final AnalyticsType analyticsType;
+    DailyBarChartEventLoad({this.startTime , this.endTime , this.analyticsType});
 }
 
 // //TODO remove the type here; if the method name Week you already have the type

@@ -17,4 +17,10 @@ class Utility{
     return dateFormat.format(DateTime.fromMillisecondsSinceEpoch(time));
   }
 
+  DateTime getTimeInstance(){
+    final currentTime = DateTime.now();
+    final time = DateTime(currentTime.year , currentTime.month , currentTime.day);
+    return time;
+  }
+
 }

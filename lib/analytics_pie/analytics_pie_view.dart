@@ -68,25 +68,35 @@ class _AnalyticsChartViewState extends State<AnalyticsChartView>
   }
 }
 
-class AppChart extends StatelessWidget {
-
-  AppChart();
+class AppChart extends StatefulWidget{
 
   @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<AnalyticsPieBloc , AnalyticsPieState>(builder: (context, state) {
+  State<StatefulWidget> createState() {
+    return _AppChart();
+  }
+}
 
-      return Column(
-        children: [
-          Container(
-            height: 300,
-            margin: EdgeInsets.all(10),
-            child: DailyBarChart(chartData: state.barChartTimeLineData, startTime: state.startTime.millisecondsSinceEpoch , endTime: state.startTime.millisecondsSinceEpoch, analyticsType: state.type, ),
-          ),
-          ListScreen()
-        ],
-      );
-    });
+class _AppChart extends State<AppChart> {
+  // If you change this value update it to the bloc too;
+  final initPage = 99;
+  final PageController _pageController = PageController(initialPage: 99);
+  DailyBarChartBloc _bloc;
+
+  _AppChart();
+
+  @override
+  void initState() {
+    _bloc = DailyBarChartBloc(expenseRepository: ExpenseRepository(),
+        analyticsPieBloc: context.read<AnalyticsPieBloc>());
+    super.initState();
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ListScreen()
+      ],
+    );
   }
 }
 
